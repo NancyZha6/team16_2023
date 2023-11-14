@@ -1,0 +1,6 @@
+name: project test
+
+on:
+  push:
+    branches:
+      - main
