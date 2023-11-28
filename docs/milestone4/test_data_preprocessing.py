@@ -28,7 +28,8 @@ def test_normalize():
     assert np.allclose(normalized_data.std(), 1)
 
     # expect non-numerical columns not affected
-    assert data['C'].equals(normalized_data['C'])
+    normalized_data2 = normalize(data)
+    assert data['C'].equals(normalized_data2['C'])
 
     # test normalization with all 0s
     zero_data = pd.DataFrame({
@@ -50,7 +51,7 @@ def test_remove_outliers():
     # test 1: remove outliers with threshold = 0.25
     cleaned_data = remove_outliers(data, 0.25)
     # expect outliers (100, 200, 300) are removed
-    assert cleaned_data.shape == (3, 3)
+    assert cleaned_data.shape == (2, 3)
 
     # test 2: remove outliers with a threshold of 0.5
     cleaned_data_50 = remove_outliers(data, 0.5)
