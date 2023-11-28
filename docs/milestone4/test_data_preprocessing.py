@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import numpy as np
-from data_preprocessing import *
+from data_preprocessing import ...
 
 def test_load_data():
 	# test with a valid file path
