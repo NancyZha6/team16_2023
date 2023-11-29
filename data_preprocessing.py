@@ -66,3 +66,44 @@ def remove_outliers(data: pd.DataFrame, threshold: float) -> pd.DataFrame:
     cleaned_data.dropna(inplace=True)
     cleaned_data.reset_index(inplace=True,drop=True)
     return cleaned_data
+
+def interpolate(spectra, flux_column='flux', wavelength_column='wavelength'):
+    """
+    Interpolate values in the spectra DataFrame.
+
+    Parameters:
+    spectra: DataFrame containing flux and wavelength columns.
+    flux_column (optional): Name of the flux column.
+    wavelength_column (optional): Name of the wavelength column.
+    #wavelengths (optional): List of predefined wavelengths for subsampling.
+
+    Returns:
+    Interpolated and subsampled DataFrame.
+
+    """
+    #if wavelengths is not None:
+    #    spectra = spectra[spectra[wavelength_column].isin(wavelengths)]
+
+    # Interpolate NaN values in both flux and wavelength columns
+    spectra[flux_column] = spectra[flux_column].interpolate()
+    spectra[wavelength_column] = spectra[wavelength_column].interpolate()
+
+    return spectra
+
+
+def correct_redshift(spectra, redshift_column='redshift'):
+    """
+    Correct the redshift in the wavelengths of the spectra DataFrame. 
+    z = (l_spectra - l)/l --> l = l_spectra/(z+1)
+
+    Parameters:
+    spectra: DataFrame containing 'wavelength' and 'flux' columns.
+    redshift: Redshift value to correct the wavelengths.
+
+    Returns:
+    DataFrame with corrected wavelengths.
+    """
+    spectra['wavelength'] = spectra['wavelength'] * (1 + spectra[redshift_column])
+
+    return spectra
+
