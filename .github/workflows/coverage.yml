@@ -24,12 +24,3 @@ jobs:
         - name: Run tests with coverage
           run: |
             pytest --cov=./ --cov-report=xml tests/test_data_preprocessing.py
-        - name: Upload coverage to Codecov
-          uses: codecov/codecov-action@v2
-          with:
-            # Token is only required for private repositories
-            # token: ${{ secrets.CODECOV_TOKEN }}
-            # Specify the path to the coverage xml report
-            file: ./coverage.xml
-            # Flag to fail the CI if there are errors during upload
-            fail_ci_if_error: true
