@@ -78,8 +78,8 @@ def test_interpolation():
     interpolated_data = interpolate(data_with_nans)
 
     # Check if NaN values in both columns are filled
-    self.assertFalse(interpolated_data['wavelength'].isna().any())
-    self.assertFalse(interpolated_data['flux'].isna().any())
+    assert not (interpolated_data['wavelength'].isna().any())
+    assert not (interpolated_data['flux'].isna().any())
 
     # Data without NaN values
     clean_data = pd.DataFrame({
