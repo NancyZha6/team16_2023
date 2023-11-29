@@ -67,4 +67,55 @@ def test_remove_outliers():
     # expect result an empty DataFrame
     assert remove_outliers(constant_data, 0.1).empty
 
+def test_interpolation():
+    # Data with NaN values in both columns
+    data_with_nans = pd.DataFrame({
+        'wavelength': [1, np.nan, 3, 4, 5],
+        'flux': [10, np.nan, 30, 40, 50]
+    })
 
+    # Perform interpolation
+    interpolated_data = interpolate(data_with_nans)
+
+    # Check if NaN values in both columns are filled
+    self.assertFalse(interpolated_data['wavelength'].isna().any())
+    self.assertFalse(interpolated_data['flux'].isna().any())
+
+    # Data without NaN values
+    clean_data = pd.DataFrame({
+        'wavelength': [1, 2, 3, 4, 5],
+        'flux': [10, 20, 30, 40, 50]
+    })
+
+    # Perform interpolation on clean data
+    result_data = interpolate(clean_data)
+
+    # Check if data remains unchanged when no NaNs are present
+    pd.testing.assert_frame_equal(result_data, clean_data)
+
+    # Additional test: Check interpolated values (assuming linear interpolation)
+    # This part depends on the interpolation method used (here we assume linear)
+    expected_interpolated_values = pd.DataFrame({
+        'wavelength': [1, 2, 3, 4, 5],
+        'flux': [10, 20, 30, 40, 50]
+    })
+    pd.testing.assert_frame_equal(interpolated_data, expected_interpolated_values)
+
+def test_redshift_correction():
+    # Test data with varied redshift values including zero
+    test_data = pd.DataFrame({
+        'wavelength': [100, 200, 300, 400],
+        'redshift': [0.5, 1, 0, 1.5]
+    })
+
+    # Expected results after redshift correction
+    expected_data = pd.DataFrame({
+        'wavelength': [150, 400, 300, 1000],  # Corrected values
+        'redshift': [0.5, 1, 0, 1.5]
+    })
+
+    # Perform redshift correction
+    corrected_data = correct_redshift(test_data)
+
+    # Check if the corrected wavelengths are as expected
+    pd.testing.assert_frame_equal(corrected_data, expected_data)
