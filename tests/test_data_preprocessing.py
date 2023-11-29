@@ -99,6 +99,11 @@ def test_interpolation():
         'wavelength': [1, 2, 3, 4, 5],
         'flux': [10, 20, 30, 40, 50]
     })
+	
+    # set the data type of the 'wavelength' and 'flux' columns
+    expected_interpolated_values['wavelength'] = expected_interpolated_values['wavelength'].astype(float)
+    expected_interpolated_values['flux'] = expected_interpolated_values['flux'].astype(float)
+
     pd.testing.assert_frame_equal(interpolated_data, expected_interpolated_values)
 
 def test_redshift_correction():
@@ -110,7 +115,7 @@ def test_redshift_correction():
 
     # Expected results after redshift correction
     expected_data = pd.DataFrame({
-        'wavelength': [150, 400, 300, 1000],  # Corrected values
+        'wavelength': [150.0, 400.0, 300.0, 1000.0],  # Corrected values
         'redshift': [0.5, 1, 0, 1.5]
     })
 
