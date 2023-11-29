@@ -1,4 +1,35 @@
-name: project test coverage
+name: Test Coverage
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - data-preprocessing
+
+jobs:
+    coverage_data_preprocessing:
+      name: Test coverage for first module data preprocessing
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v3 
+          with:
+            python-version: '3.10' # let's use a recent version
+        - name: Install Python dependencies 
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            pip install pytest pytest-cov
+        - name: Set PYTHONPATH
+          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+        - name: Run tests with coverage
+          run: |
+            pytest --cov=./ --cov-report=xml test/test_data_preprocessing.py
+        - name: Upload coverage to Codecov
+          uses: codecov/codecov-action@v2
+          with:
+            # Token is only required for private repositories
+            # token: ${{ secrets.CODECOV_TOKEN }}
+            # Specify the path to the coverage xml report
+            file: ./coverage.xml
+            # Flag to fail the CI if there are errors during upload
+            fail_ci_if_error: true
