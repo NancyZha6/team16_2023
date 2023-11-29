@@ -1,24 +1,26 @@
 1. Organization 
 a. Directory Structure and b. Test Suite: 
 team16/
-├── API/
-│   ├── DataPreprocessing.py
-│   ├── MetadataExtractor.py
-│   ├── WavelengthAlignment.py
-│   ├── SpectralVisualizer.py
-│   ├── DataAugmentation.py
-│   ├── FeatureExtractor.py
-│   ├── diagram.png
-│   └── diagram_code.R
-├── workflows_repo/
+├── DataPreprocessing.py
+├── MetadataExtractor.py
+|── WavelengthAlignment.py
+│── SpectralVisualizer.py
+│── DataAugmentation.py
+│── FeatureExtractor.py
+│── API_Draft/
+|   ├── diagram.png
+|   ├── API_draft
+├── tests
+|   ├──test_data_reprocess.py
+├── github.workflows/
 │   ├── test.yml
 │   ├── coverage.yml
 ├── docs/
-│   ├── requirements.txt
 │   ├── CHANGELOG.md
 │   ├── coverage.yml
 │   └── milestone4.md
 ├── setup.py
+├── requirements.txt
 ├── LICENSE
 └── README.md
 
