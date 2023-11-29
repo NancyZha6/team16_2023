@@ -23,7 +23,7 @@ jobs:
           run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
         - name: Run tests with coverage
           run: |
-            pytest --cov=./ --cov-report=xml test/test_data_preprocessing.py
+            pytest --cov=./ --cov-report=xml tests/test_data_preprocessing.py
         - name: Upload coverage to Codecov
           uses: codecov/codecov-action@v2
           with:
