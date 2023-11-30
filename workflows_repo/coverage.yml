@@ -1,4 +1,0 @@
-name: project test coverage
-
-on:
-  workflow_dispatch:
