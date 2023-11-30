@@ -55,6 +55,42 @@ cleaned_df = remove_outliers(df, 0.1)
 
 **Note:** This function will throw an exception if the input DataFrame is empty. 
 
+
+### 4. `interpolate(spectra, flux_column='flux', wavelength_column='wavelength') -> pd.DataFrame`
+Interpolates values in the spectra DataFrame.
+
+**Parameters:**
+
+- `spectra` (pd.DataFrame): DataFrame containing flux and wavelength columns.
+- `flux_column` (str, optional): Name of the flux column.
+- `wavelength_column` (str, optional): Name of the wavelength column.
+
+**Returns:**
+
+- `pd.DataFrame`: Interpolated and subsampled DataFrame.
+
+**Usage:**
+```python
+interpolated_df = interpolate(spectra)
+```
+
+### 5. `correct_redshift(spectra, redshift_column='redshift') -> pd.DataFrame`
+Corrects the redshift in the wavelengths of the spectra DataFrame.
+
+**Parameters:**
+
+- `spectra` (pd.DataFrame): DataFrame containing 'wavelength' and 'flux' columns.
+- `redshift_column` (str, optional): Name of the redshift column.
+
+**Returns:**
+
+- `pd.DataFrame`: DataFrame with corrected wavelengths.
+
+**Usage:**
+```python
+corrected_df = correct_redshift(spectra)
+```
+
 ---
 
 ### Important Notes:
