@@ -38,7 +38,7 @@ def normalize(data: pd.DataFrame) -> pd.DataFrame:
             data[col] = data[col] - data[col].mean()
     return data
 
-def remove_outliers(data: pd.DataFrame, threshold: float) -> pd.DataFrame:
+def remove_outliers(data: pd.DataFrame, threshold: float, to_remove_columns: list) -> pd.DataFrame:
     """
     Removes outliers from the spectral data based on the specified threshold.
     
@@ -46,6 +46,7 @@ def remove_outliers(data: pd.DataFrame, threshold: float) -> pd.DataFrame:
     data: DataFrame containing the spectral data to remove outliers.
     threshold: The percentile threshold to remove outliers. 
                E.g. threshold=0.1: remove top and bottom 5% data as outliers.
+    to_remove_columns: columns to perform outlier removal on
     
     Returns:
     DataFrame with outliers removed. 
@@ -58,14 +59,16 @@ def remove_outliers(data: pd.DataFrame, threshold: float) -> pd.DataFrame:
     upper_threshold=1-lower_threshold
 
     # convert it to data threshold 
-    lower_percentiles = data.quantile(lower_threshold)
-    upper_percentiles = data.quantile(upper_threshold) 
+    lower_percentiles = data[to_remove_columns].quantile(lower_threshold)
+    upper_percentiles = data[to_remove_columns].quantile(upper_threshold) 
 
     # remove any data above or below the upper/lower data threshold
-    cleaned_data = data[(data > lower_percentiles) & (data < upper_percentiles)]
+    cleaned_data=data.copy()
+    cleaned_data[to_remove_columns]= data[to_remove_columns][(data[to_remove_columns] > lower_percentiles) & (data[to_remove_columns] < upper_percentiles)]
     cleaned_data.dropna(inplace=True)
     cleaned_data.reset_index(inplace=True,drop=True)
     return cleaned_data
+
 
 def interpolate(spectra, flux_column='flux', wavelength_column='wavelength'):
     """
@@ -91,19 +94,20 @@ def interpolate(spectra, flux_column='flux', wavelength_column='wavelength'):
     return spectra
 
 
-def correct_redshift(spectra, redshift_column='redshift'):
+def correct_redshift(spectra, wavelenght_column='wavelength',redshift_column='redshift'):
     """
     Correct the redshift in the wavelengths of the spectra DataFrame. 
     z = (l_spectra - l)/l --> l = l_spectra/(z+1)
 
     Parameters:
     spectra: DataFrame containing 'wavelength' and 'flux' columns.
-    redshift: Redshift value to correct the wavelengths.
+    wavelenght_column=column containing wavelength 
+    redshift_column: Redshift value to correct the wavelengths.
 
     Returns:
     DataFrame with corrected wavelengths.
     """
-    spectra['wavelength'] = spectra['wavelength'] * (1 + spectra[redshift_column])
+    spectra[wavelenght_column] = spectra[wavelenght_column] * (1 + spectra[redshift_column])
 
     return spectra
 
