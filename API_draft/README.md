@@ -19,7 +19,7 @@ This folder contains the draft of the Application Programming Interface (API) fo
       - `exclude_columns` (List[str], optional): List of columns to exclude from normalization. Default is `['objectid']`.
     - Returns: DataFrame containing normalized data.
 
-  - **Function: remove_outliersremove_outliers(data: pd.DataFrame, threshold: float, to_remove_columns: list) -> DataFrame:**
+  - **Function: remove_outliers(data: pd.DataFrame, threshold: float, to_remove_columns: list) -> DataFrame:**
     - Removes outliers above/below specific threshold from the spectral data 
     - Parameters:
       - `data`: the data to remove outliers
