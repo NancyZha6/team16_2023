@@ -1,5 +1,6 @@
 1. Organization 
 a. Directory Structure and b. Test Suite: 
+```
 team16/
 ├── DataPreprocessing.py
 ├── MetadataExtractor.py
@@ -23,6 +24,7 @@ team16/
 ├── requirements.txt
 ├── LICENSE
 └── README.md
+```
 
 c. Setup Tools Usage:
 Setuptools is well-established particularly for developers accustomed to traditional Python packaging practices. To utilize Setuptools, we create a setup.py script containing essential meta-data (e.g. requirements, version, name, entry points) about their package and then use Setuptools to package and distribute. 
