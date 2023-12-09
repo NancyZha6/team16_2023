@@ -49,12 +49,12 @@ def test_remove_outliers():
     })
 
     # test 1: remove outliers with threshold = 0.25
-    cleaned_data = remove_outliers(data, 0.25)
-    # expect outliers (100, 200, 300) are removed
+    cleaned_data = remove_outliers(data, 0.25, to_remove_columns = ['A', 'B', 'C'])
+    # expect outliers (100, 200, 300) and (1, 4, 7)are removed
     assert cleaned_data.shape == (2, 3)
 
     # test 2: remove outliers with a threshold of 0.5
-    cleaned_data_50 = remove_outliers(data, 0.5)
+    cleaned_data_50 = remove_outliers(data, 0.5, to_remove_columns = ['A', 'B', 'C'])
     # expect half of the data is removed (top and bottom 25%)
     assert cleaned_data_50.shape == (2, 3)
 
@@ -65,7 +65,7 @@ def test_remove_outliers():
         'C': [1, 1, 1]
     })
     # expect result an empty DataFrame
-    assert remove_outliers(constant_data, 0.1).empty
+    assert remove_outliers(constant_data, 0.1, to_remove_columns = ['A', 'B', 'C']).empty
 
 def test_interpolation():
     # Data with NaN values in both columns
@@ -120,7 +120,7 @@ def test_redshift_correction():
     })
 
     # Perform redshift correction
-    corrected_data = correct_redshift(test_data)
+    corrected_data = correct_redshift(test_data, wavelenght_column='wavelength',redshift_column='redshift')
 
     # Check if the corrected wavelengths are as expected
     pd.testing.assert_frame_equal(corrected_data, expected_data)
