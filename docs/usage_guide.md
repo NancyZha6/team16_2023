@@ -44,6 +44,7 @@ Removes outliers from a DataFrame based on the specified percentile threshold. I
 **Parameters:**
 - `data` (pd.DataFrame): The DataFrame containing the data from which to remove outliers.
 - `threshold` (float): The percentile threshold to identify outliers (e.g., 0.1 for top and bottom 5%).
+- `to_remove_columns` (list): a list of columns to perform outlier removal on 
 
 **Returns:**
 - `pd.DataFrame`: The DataFrame with outliers removed.
@@ -80,6 +81,7 @@ Corrects the redshift in the wavelengths of the spectra DataFrame.
 **Parameters:**
 
 - `spectra` (pd.DataFrame): DataFrame containing 'wavelength' and 'flux' columns.
+- `wavelenght_column` (str): name of the column in spectra datafram that contains wavelength
 - `redshift_column` (str, optional): Name of the redshift column.
 
 **Returns:**
