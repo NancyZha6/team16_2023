@@ -24,3 +24,6 @@ jobs:
         - name: Run tests with coverage
           run: |
             pytest --cov=. tests/test_data_preprocessing.py
+            pytest --cov=. tests/test_metadata_extractor.py
+            pytest --cov=. tests/test_wavelength_alignment.py
+            pytest --cov=. tests/test_data_augmentation.py

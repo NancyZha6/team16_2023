@@ -9,6 +9,23 @@ on:
       - dev
 
 jobs:
+    test_integration:
+      name: Test module integration
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v3 
+          with:
+            python-version: '3.10' # let's use a recent version
+        - name: Install Python dependencies 
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r tests/requirements.txt
+        - name: Set PYTHONPATH
+          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+        - name: Run integration test files
+          run: |
+            pytest tests/test_integration.py
     test_data_preprocessing:
       name: Test first module data preprocessing
       runs-on: ubuntu-latest
