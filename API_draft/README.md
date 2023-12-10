@@ -50,7 +50,6 @@ This folder contains the draft of the Application Programming Interface (API) fo
         - `data`: the data to extract metadata from
         - `identifiers`: If True, extract object identifiers.
         - `coordinates`: If True, extract object coordinates.
-        - `chemical_abundances`: If True, extract chemical abundances.
         - `redshifts`: If True, extract redshifts.
         - `other_fields`: A list of other fields to extract if specified.
       - Returns: Dataframe containing the extracted metadata.
