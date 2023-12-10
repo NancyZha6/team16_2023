@@ -4,11 +4,11 @@ from metadata_extractor import *
 
 # Function to create a mock DataFrame with sample data
 mock_data= pd.DataFrame({
-        'identifier': [1, 2, 3],
-        'coordinate_x': [10.0, 20.0, 30.0],
-        'coordinate_y': [15.0, 25.0, 35.0],
-        'equivalent_width': [0.1, 0.2, 0.3],
-        'redshift': [0.001, 0.002, 0.003],
+        'specObjID': [1, 2, 3],
+        'ra': [10.0, 20.0, 30.0],
+        'dec': [15.0, 25.0, 35.0],
+        'h_beta_eqw': [0.1, 0.2, 0.3],
+        'z': [0.001, 0.002, 0.003],
         'other': ['info1', 'info2', 'info3']
     })
 
