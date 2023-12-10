@@ -7,7 +7,7 @@ mock_data= pd.DataFrame({
         'identifier': [1, 2, 3],
         'coordinate_x': [10.0, 20.0, 30.0],
         'coordinate_y': [15.0, 25.0, 35.0],
-        'chemical_abundance': [0.1, 0.2, 0.3],
+        'equivalent_width': [0.1, 0.2, 0.3],
         'redshift': [0.001, 0.002, 0.003],
         'other': ['info1', 'info2', 'info3']
     })
@@ -24,17 +24,17 @@ def test_extract_metadata_all_options():
     assert all([col in result.columns for col in expected_columns]), "All columns should be present in the result"
 
 # Test to ensure metadata extraction is correct with specific options enabled
-@pytest.mark.parametrize("identifiers, coordinates, chemical_abundances, redshifts, other_fields, expected_columns", [
+@pytest.mark.parametrize("identifiers, coordinates, equivalent_width, redshifts, other_fields, expected_columns", [
     (True, False, False, False, None, ['identifier']),
     (False, True, False, False, None, ['coordinate_x', 'coordinate_y']),
-    (False, False, True, False, None, ['chemical_abundance']),
+    (False, False, True, False, None, ['equivalent_width']),
     (False, False, False, True, None, ['redshift']),
     (False, False, False, False, ['other'], ['other']),
 ])
-def test_extract_metadata_specific_options(identifiers, coordinates, chemical_abundances, redshifts, other_fields, expected_columns):
+def test_extract_metadata_specific_options(identifiers, coordinates, equivalent_width, redshifts, other_fields, expected_columns):
 
     result = extract_metadata(mock_data, identifiers=identifiers, coordinates=coordinates,
-                              chemical_abundances=chemical_abundances, redshifts=redshifts,
+                              equivalent_width=equivalent_width, redshifts=redshifts,
                               other_fields=other_fields)
 
     # Verify that the result is a DataFrame
