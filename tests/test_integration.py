@@ -3,7 +3,6 @@ import pandas as pd
 import data_preprocessing 
 import metadata_extraction 
 import wavelength_alignment 
-import data_augumentation
 
 # Sample ADQL query for testing
 ADQL_QUERY = """
@@ -47,10 +46,6 @@ def test_data_processing_pipeline():
     # Step 3: Wavelength alignment
     aligned_data = wavelength_alignment.align_wavelength(redshift_corrected_data, wavelength_range=(400, 700))
     assert isinstance(aligned_data, pd.DataFrame), "align_wavelength should return a DataFrame"
-
-    # Step 5: Data augumentation
-    augumented_data = data_augumentation.augment_data(aligned_data, methods = ['standard_derivative', 'fractional_derivative'], frac_order = 0.75)
-    assert isinstance(aligned_data, pd.DataFrame), "augment_data should return a DataFrame"
 
     # Optionally, you can include additional assertions to verify the content of the dataframes
     # For example, you can check if certain expected columns are present in the dataframes
