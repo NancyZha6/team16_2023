@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from metadata_extractor import *
+from metadata_extraction import *
 
 # Function to create a mock DataFrame with sample data
 mock_data= pd.DataFrame({
