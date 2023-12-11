@@ -20,12 +20,12 @@ def test_extract_metadata_all_options():
     assert isinstance(result, pd.DataFrame), "Result should be a DataFrame"
 
     # Verify that all columns are present
-    expected_columns = mock_data.columns
+    expected_columns = ['object_id','equivalent_width','coord.red_ascension','coord.declination','redshift']
     assert all([col in result.columns for col in expected_columns]), "All columns should be present in the result"
 
 # Test to ensure metadata extraction is correct with specific options enabled
 @pytest.mark.parametrize("identifiers, coordinates, equivalent_width, redshifts, other_fields, expected_columns", [
-    (True, False, False, False, None, ['identifier']),
+    (True, False, False, False, None, ['object_id']),
     (False, True, False, False, None, ['coord.red_ascension', 'coord.declination']),
     (False, False, True, False, None, ['equivalent_width']),
     (False, False, False, True, None, ['redshift']),
