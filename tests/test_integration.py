@@ -7,7 +7,7 @@ import data_augumentation
 
 # Sample ADQL query for testing
 ADQL_QUERY = """
-SELECT TOP 30 s.specObjID, s.z, s.ra, s.dec, s.waveMin, s.waveMax, s.class, s.spectroFlux_u, g.h_beta_eqw, 
+SELECT TOP 30 s.specObjID, s.z, s.ra, s.dec, s.waveMin, s.waveMax, s.class, s.spectroFlux_u, g.h_beta_eqw 
 FROM dbo.SpecObj AS s
 JOIN GalSpecLine AS g ON s.specobjid = g.specobjid
 WHERE s.class IN ('STAR', 'GALAXY', 'QSO')
@@ -19,7 +19,7 @@ def test_data_processing_pipeline():
     data = data_preprocessing.load_data(ADQL_QUERY)
     assert isinstance(data, pd.DataFrame), "load_data should return a DataFrame"
     # check that data is returned 
-    assert not data.isempty(), "load_data should return non-empty DataFrame"
+    assert not data.empty, "load_data should return non-empty DataFrame"
 
     normalized_data = data_preprocessing.normalize(data)
     assert isinstance(normalized_data, pd.DataFrame), "normalize should return a DataFrame"
@@ -34,7 +34,7 @@ def test_data_processing_pipeline():
     assert isinstance(redshift_corrected_data, pd.DataFrame), "correct_redshift should return a DataFrame"
 
     # check that data is returned 
-    assert not redshift_corrected_data.isempty(), "data preprocessing should return non-empty DataFrame"
+    assert not redshift_corrected_data.empty, "data preprocessing should return non-empty DataFrame"
     
     # Step 2: Extract metadata
     extracted_metadata = metadata_extraction.extract_metadata(redshift_corrected_data, identifiers = True, 
