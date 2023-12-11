@@ -59,7 +59,7 @@ jobs:
           run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
         - name: Run metadata extractor module test files
           run: |
-            pytest tests/test_metadata_extractor.py
+            pytest tests/test_metadata_extraction.py
     test_wavelength_alignment:
       name: Test Wavelength Alignment module
       runs-on: ubuntu-latest
