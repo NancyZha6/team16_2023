@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import data_preprocessing 
-import metadata_extractor 
+import metadata_extraction 
 import wavelength_alignment 
 import data_augumentation
 
@@ -37,7 +37,7 @@ def test_data_processing_pipeline():
     assert not redshift_corrected_data.isempty(), "data preprocessing should return non-empty DataFrame"
     
     # Step 2: Extract metadata
-    extracted_metadata = metadata_extractor.extract_metadata(redshift_corrected_data, identifiers = True, 
+    extracted_metadata = metadata_extraction.extract_metadata(redshift_corrected_data, identifiers = True, 
                                                                                         coordinates = True,
                                                                                             equivalent_width = True,
                                                                                             redshifts = True,
