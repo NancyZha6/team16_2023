@@ -26,7 +26,7 @@ def test_extract_metadata_all_options():
 # Test to ensure metadata extraction is correct with specific options enabled
 @pytest.mark.parametrize("identifiers, coordinates, equivalent_width, redshifts, other_fields, expected_columns", [
     (True, False, False, False, None, ['identifier']),
-    (False, True, False, False, None, ['coordinate_x', 'coordinate_y']),
+    (False, True, False, False, None, ['coord.red_ascension', 'coord.declination']),
     (False, False, True, False, None, ['equivalent_width']),
     (False, False, False, True, None, ['redshift']),
     (False, False, False, False, ['other'], ['other']),
