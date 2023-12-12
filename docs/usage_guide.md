@@ -1,4 +1,4 @@
-## User Guide: Data Processing Functions for Astronomical Data
+## User Guide: Astronomical Research Library for Astronomical Data
 
 This guide provides an overview and usage instructions for functions designed to work with astronomical data from the Sloan Digital Sky Survey (SDSS)
 
