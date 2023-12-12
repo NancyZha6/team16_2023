@@ -7,7 +7,8 @@ from wavelength_alignment import align_wavelength
 def test_align_wavelength_no_interpolation():
     # test data with varied wavelengths and flux values
     data = pd.DataFrame({
-        'wavelength': [500, 510, 520, 530],
+        'waveMin': [500, 510, 520, 530],
+        'waveMax': [505, 515, 525, 535],
         'flux': [1.0, 2.0, 3.0, 4.0]
     })
 
@@ -15,19 +16,20 @@ def test_align_wavelength_no_interpolation():
     aligned_data = align_wavelength(data, wavelength_range=(505, 525), interpolation=False)
 
     # check if aligned wavelengths are within specified range
-    assert aligned_data['wavelength'].min() >= 505
-    assert aligned_data['wavelength'].max() <= 525
+    assert aligned_data['waveMin'].min() >= 505
+    assert aligned_data['waveMax'].max() <= 525
 
     # get the flux values corresponding to the aligned wavelengths
     aligned_flux = aligned_data['flux'].values
 
     # check if the flux values remain the same (no interpolation)
-    np.testing.assert_array_equal(aligned_flux, data[data['wavelength'].isin(aligned_data['wavelength'])]['flux'].values)
+    np.testing.assert_array_equal(aligned_flux, data[(data['waveMin'] >= 505) & (data['waveMax'] <= 525)]['flux'].values)
 
 def test_align_wavelength_with_interpolation():
     # test data with varied wavelengths and flux values
     data = pd.DataFrame({
-        'wavelength': [500, 510, 520, 530],
+        'waveMin': [500, 510, 520, 530],
+        'waveMax': [505, 515, 525, 535],
         'flux': [1.0, 2.0, 3.0, 4.0]
     })
 
@@ -35,8 +37,9 @@ def test_align_wavelength_with_interpolation():
     aligned_data = align_wavelength(data, wavelength_range=(505, 525), interpolation=True)
 
     # check if aligned wavelengths are within specified range
-    assert aligned_data['wavelength'].min() >= 505
-    assert aligned_data['wavelength'].max() <= 525
+    assert aligned_data['waveMin'].min() >= 505
+    assert aligned_data['waveMax'].max() <= 525
 
     # check if there are interpolated values for aligned wavelengths
     assert not aligned_data['flux'].isna().any()
+
