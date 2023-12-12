@@ -14,21 +14,23 @@ def  load_data(adql_query: str) -> pd.DataFrame:
     df = SDSS.query_sql(adql_query).to_pandas()
     return df
 
-def normalize(data: pd.DataFrame) -> pd.DataFrame:
+# new normalize function (add exclude_columns for identifiers):
+def normalize(data: pd.DataFrame, exclude_columns=['objectid']) -> pd.DataFrame:
     """
     Normalizes the spectral data in the DataFrame.
-    
     Parameters:
     data: DataFrame containing the spectral data to normalize.
-    
+    exclude_columns: List of columns to exclude from normalization.
     Returns:
     DataFrame containing normalized data.
     """
     if data.empty:
         raise Exception("Dataset is empty")
-    # normalize only numerical columns:
-    numerical_cols= data.select_dtypes(include='number').columns
-    # then apply normalization on these columns by subtracting mean and dividing by std 
+
+    # exclude specified columns from normalization
+    numerical_cols = data.select_dtypes(include='number').columns.difference(exclude_columns)
+
+    # then apply normalization on these columns by subtracting mean and dividing by std
     for col in numerical_cols:
         std_dev = data[col].std()
         if std_dev != 0:
@@ -36,6 +38,7 @@ def normalize(data: pd.DataFrame) -> pd.DataFrame:
         else:
             # When std_dev is 0, subtract the mean without dividing
             data[col] = data[col] - data[col].mean()
+
     return data
 
 def remove_outliers(data: pd.DataFrame, threshold: float, to_remove_columns: list) -> pd.DataFrame:
