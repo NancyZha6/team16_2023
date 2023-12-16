@@ -26,6 +26,23 @@ jobs:
         - name: Run integration test files
           run: |
             pytest tests/test_integration.py
+    test_data_query:
+      name: Test first module data query
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v3 
+          with:
+            python-version: '3.10' # let's use a recent version
+        - name: Install Python dependencies 
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r tests/requirements.txt
+        - name: Set PYTHONPATH
+          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+        - name: Run data query module test files
+          run: |
+            pytest tests/test_data_query.py
     test_data_preprocessing:
       name: Test first module data preprocessing
       runs-on: ubuntu-latest
@@ -94,3 +111,20 @@ jobs:
         - name: Run data augmentation module test files
           run: |
             pytest tests/test_data_augmentation.py
+    test_machine_learning:
+      name: Test Machine Learning Module
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v3 
+          with:
+            python-version: '3.10' # let's use a recent version
+        - name: Install Python dependencies 
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r tests/requirements.txt
+        - name: Set PYTHONPATH
+          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+        - name: Run machine learning module test files
+          run: |
+            pytest tests/test_machine_learning.py
