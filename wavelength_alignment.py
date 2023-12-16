@@ -1,6 +1,7 @@
 import pandas as pd 
 from astroquery.sdss import SDSS
 from typing import Tuple
+from data_query import *
 from data_preprocessing import *
 
 def align_wavelength(data: pd.DataFrame, wavelength_range: Tuple[float, float], interpolation: bool = False) -> pd.DataFrame:
@@ -17,7 +18,7 @@ def align_wavelength(data: pd.DataFrame, wavelength_range: Tuple[float, float], 
     """
     # Filter data within specified wavelength range
     # add .copy() not to change the original dataframe
-    aligned_data = data[(data['waveMin'] >= wavelength_range[0]) & (data['waveMax'] <= wavelength_range[1])].copy()
+    aligned_data = data[(data['loglam'] >= wavelength_range[0]) & (data['loglam'] <= wavelength_range[1])].copy()
 
     if interpolation:
         # Interpolate flux values for aligned wavelengths
