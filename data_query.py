@@ -10,7 +10,7 @@ def load_data_sql(adql_query: str = None) -> pd.DataFrame:
 
     Parameters:
     adql_query (str, optional): ADQL query to retrieve data. Default is None.
-
+    
     Returns:
     pd.DataFrame: DataFrame containing SDSS data defined by the query or identifiers.
     """
@@ -106,7 +106,6 @@ def load_data_ids(ids_query=None) -> pd.DataFrame:
     return dataframes
 
 
-
 def load_data_constraints(constraints: dict) -> pd.DataFrame:
     """
     Retrieves SDSS data based on constraints provided in the form of a dictionary.
@@ -117,9 +116,26 @@ def load_data_constraints(constraints: dict) -> pd.DataFrame:
     Returns:
     pd.DataFrame: DataFrame containing SDSS data defined by the constraints.
     """
-    query = f"SELECT * FROM SpecObj WHERE "
-    query += " AND ".join([f"{key}={value}" for key, value in constraints.items()])
+    # Check if constraints are empty
+    if not constraints:
+        raise ValueError("No constraints provided. Please provide valid constraints.")
 
-    result = SDSS.query_sql(query)
-    data = result.get_fits_spectrum().to_pandas()
+    # Construct the SELECT part of the query
+    query = "SELECT TOP 10 specObjID, z, ra, dec, class, spectroFlux_u FROM dbo.SpecObj WHERE "
+
+    # Construct the WHERE part of the query with proper IN clause
+    query += " AND ".join([f"{key} IN {tuple(map(repr, value))}" for key, value in constraints.items()])
+    print(query)
+
+    # Execute the query
+    result = SDSS.query_sql(query, timeout=300)
+
+    # Check if the result is None
+    if result is None:
+        raise ValueError("Query result is None. No data found.")
+
+    # Convert the result to a pandas DataFrame
+    data = result.to_pandas()
     return data
+
+
