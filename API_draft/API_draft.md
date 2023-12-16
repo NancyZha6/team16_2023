@@ -155,13 +155,11 @@ This folder contains the draft of the Application Programming Interface (API) fo
 
 
 ### 8. Spectral Feature Extraction (Additional Feature 2, Feature Extractor in API diagram)
-  - **Function: extract_spectral_features(data: DataFrame, continuum: DataFrame, sigma_level:float) -> DataFrame:**
-    - Extracts spectral features defining emission and absorption lines.
+  - **Function: extract_spectral_features(data: pd.DataFrame) -> array:**
+    - Extract spectral features defining emission and absorption lines as those with flux levels exceeding 2 sigma from the continuum.
     - Parameters:
-      - `data`: The DataFrame containing the observed spectral data which includes flux values for various wavelengths.
-      - `continuum`: The DataFrame containing the estimated continuum levels corresponding to the wavelength.
-      - `sigma_level`: The number of standard deviations used to identify significant deviations from the continuum.
-    - Returns: DataFrame containing the identified spectral features.
+      - `data`: The DataFrame containing the observed spectral data which includes `flux`, `loglam` (log of wavelength), and `model` (continuum).
+    - Returns: Array 1 containing the wavelength of emission, array 2 containing the wavelengh of absorption, and array 3 is the potential error message.
 
 ## Implementation Specifications
 - Developers will select and implement at least two additional features from Annex B.
