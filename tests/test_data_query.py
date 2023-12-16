@@ -27,7 +27,7 @@ def test_load_data_file():
     assert all(key.startswith('hdu_') and len(value) > 0 for key, value in result_dict.items())
 
     # Test with an invalid FITS file
-    invalid_fits_file = "spectrum.fits"
+    invalid_fits_file = "tests/spectrum.fits"
     try:
         load_data_file(invalid_fits_file)
     except Exception as e:
