@@ -23,7 +23,9 @@ jobs:
           run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
         - name: Run tests with coverage
           run: |
+            pytest --cov=. tests/test_data_query.py
             pytest --cov=. tests/test_data_preprocessing.py
             pytest --cov=. tests/test_metadata_extractor.py
             pytest --cov=. tests/test_wavelength_alignment.py
             pytest --cov=. tests/test_data_augmentation.py
+            pytest --cov=. tests/test_machine_learning.py
