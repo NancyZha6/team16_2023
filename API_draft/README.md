@@ -6,29 +6,37 @@ This folder contains the draft of the Application Programming Interface (API) fo
 ## Modules, Classes, and Functions
 
 ### 1. Data Query Module 
-   - **Function: load_data_sql(adql_query: str, plateid: int, mjd: int, fiberid:int) -> DataFrame:**
-      - Accepts an ADQL query as a string format, or plateid, or mjd, and fiberid and retrieves data from Sloan Digital Sky Survey (SDSS) database.User needs to either    to provide a query to pull data directly or provide identifiers for the sepctrum and the API will pull the data from them. 
-      - Parameters:
-        - `adql_query`: the query to retrieve data in string format
-        - `plateid`: identifiers
-        - `mjd`: identifiers
-        - `fiberid`:identifiers
-      - Returns: Dataframe containing SDSS data defined via the query.
-
-   - **Function: load_data_file(file: fits) -> DataFrame:**
-     - Accepts a fits file and just open it and load data
+   - **Function: load_data_sql(adql_query: str = None) -> DataFrame**
+     - Retrieves SDSS data based on an ADQL query or identifiers.
      - Parameters:
-        - `file`: a fits file   
-     - Returns: Dataframe containing SDSS data defined via the query. 
+        - `adql_query`: ADQL query to retrieve data. Default is None.
+     - Returns: DataFrame containing SDSS data defined by the query or identifiers.
+     
+   - **Function: load_data_file(file: fits) -> dict:**
+     - Accepts a fits file and just open it and load data.
+     - Parameters:
+        - `file`: FITS file path that meets SDSS format.
+     - Returns: Dictionary containing DataFrames for each HDU in the FITS file.
+
+   - **Function: load_data_ids(ids_query: str = None) -> dict:**
+     - Retrieves SDSS data based on plateid, fiberid, and mjd.
+     - Parameters:
+        - `ids_query`: ADQL query to extract plateid, fiberid, and mjd. Default is None.
+     - Returns: Dictionary containing DataFrames for each HDU with extracted spectra.
    
    - **Function: load_data_constraints(constraints: dictionary) -> DataFrame:**
-      - Accepts a dictionary of constraints on the SQL query to put in where statement etc 
+      - Retrieves SDSS data based on constraints provided in the form of a dictionary.
       - Parameters:
         - `constraints`: constraints to put in the where statement of the query to get data  
       - Returns: Dataframe containing SDSS data defined via the query. 
 
 ### 2. Data Preprocessing Module (Data Preprocessing in API diagram)
-    
+   - **Function: load_data(adql_query: str) -> DataFrame:**
+      - Retrieves SDSS data using an ADQL query as a string.
+      - Parameters:
+        - `adql_query` (str): The query string in ADQL format to retrieve data.
+      - Returns: DataFrame containing the data fetched from SDSS based on the ADQL query.
+
   - **Function: normalize(data: DataFrame, exclude_columns: List[str] = ['objectid']) -> DataFrame:**
     - Normalizes the spectral data in the DataFrame.
     - Parameters:
@@ -48,8 +56,8 @@ This folder contains the draft of the Application Programming Interface (API) fo
     - Performs interpolation on the spectral data.
     - Parameters:
       - `spectra`: DataFrame containing flux and wavelength columns perform interpolation.
-      -  `flux_column (optional)`: Name of the flux column.
-      -  `wavelength_column (optional)`: Name of the wavelength column.
+      -  `flux_column`: Name of the flux column.
+      -  `wavelength_column`: Name of the wavelength column.
     - Returns: Dataframe containing interpolated data 
 
   - **Function: correct_redshift(spectra: DataFrame, wavelenght_column='wavelength',redshift_column='redshift') -> DataFrame:**
@@ -63,18 +71,22 @@ This folder contains the draft of the Application Programming Interface (API) fo
 ### 3. Metadata Extraction Module (Metadata Extraction in API diagram)
   - **Function: extract_metadata(data: DataFrame, identifiers: bool = True, coordinates: bool = True, chemical_abundances: bool = True, redshifts: bool = True, other_fields: List[str] = None) -> DataFrame:**
     - Extracts metadata from the spectral data based on user-defined parameters.
-      - Parameters:
-        - `data`: the data to extract metadata from
-        - `identifiers`: If True, extract object identifiers.
-        - `coordinates`: If True, extract object coordinates.
-        - `redshifts`: If True, extract redshifts.
-        - `other_fields`: A list of other fields to extract if specified.
-      - Returns: Dataframe containing the extracted metadata.
+    - Parameters:
+      - `data`: the data to extract metadata from
+      - `identifiers`: If True, extract object identifiers.
+      - `coordinates`: If True, extract object coordinates.
+      - `redshifts`: If True, extract redshifts.
+      - `other_fields`: A list of other fields to extract if specified.
+    - Returns: Dataframe containing the extracted metadata.
 
 ### 4. Wavelength Alignment Module (Wavelength Alignment in API diagram)
-  - **Function: align_wavelength(data: DataFrame, wavelength_range: Tuple[float, float], interpolation = False) -> DataFrame:**
-    - Aligns the wavelength for all spectra within a predefined range
+  - **Function: align_wavelength(data: pd.DataFrame, wavelength_range: Tuple[float, float], interpolation: bool = False) -> DataFrame:**
+    - Aligns the wavelength for all spectra within a predefined range.
     - If needed, add interpolation. Default: no interpolation (interpolation = False)
+    - Parameters:
+       - `data`: DataFrame containing 'wavelength' and 'flux' columns.
+       - `wavelength_range`: Tuple representing the range of wavelengths to align.
+       - `interpolation`: If True, perform interpolation. Default is False.
     - Returns: DataFrame with aligned wavelength spectra.
 
 ### 5. Visualization Module (Spectral Visualizer in API diagram)
@@ -86,31 +98,61 @@ This folder contains the draft of the Application Programming Interface (API) fo
     - Returns: A matplotlib Figure object of the plotted data.
 
 ### 6. Data Augmentation Module (Data Augmentation in API diagram)
-  - **Function: augment_data(data: DataFrame, methods:List) -> DataFrame:**
-    - Computes derivatives and fractional derivatives, appending them to each preprocessed spectra.
+  - **Function: standard_derivative(flux: numpy.ndarray, wavelength: numpy.ndarray) -> array:**
+    - Calculates the standard derivative of flux with respect to wavelength.
     - Parameters:
-       - `data`: The DataFrame containing spectral data to augment.
-       - `method`: A list of callable functions that define the augmentation methods to be applied.
-    - Returns: The augmented DataFrame.
+      - `flux`:  A numpy array of flux data.
+      - `wavelength`: A numpy array of wavelength data.
+    - Returns: The derivative of flux with respect to wavelength.
+
+  - **Function: fractional_derivative(flux: numpy.ndarray, wavelength: numpy.ndarray, order: float, h: float = 1e-5, max_terms: int = 50) -> array:**
+    - Calculates the fractional derivative of flux with respect to wavelength using the Grünwald-Letnikov approach.
+    - Parameters:
+      - `flux`: The flux data (as a numpy array).
+      - `wavelength`: The wavelength data (as a numpy array).
+      - `order`: The order of the derivative (fractional).
+      - `h`: The step size for numerical differentiation (default is 1e-5).
+      - `max_terms`: Maximum number of terms to include in the sum (default is 50).
+    - Returns: The fractional derivative of flux with respect to wavelength.
+  
+  - **Function: augment_data(data: pd.DataFrame, methods: list, frac_order: float = None) -> DataFrame:**
+   - Computes derivatives and fractional derivatives of flux with respect to wavelength, appending them to each preprocessed spectrum in the DataFrame.
+   - Parameters:
+      - `data`: The DataFrame containing spectral data to augment. Assumes 'flux' and 'wavelength' columns are present.
+      - `methods`: A list of callable functions that define the augmentation methods to be applied.
+      - `frac_order`: The order of the fractional derivative.
+   - Returns: The augmented DataFrame.
 
 ### 7. Machine Learning Module (Additional Feature 1, Astronomical Classifier in API diagram)
-  - **Function: fit(X_train: DataFrame, y_train: DataFrame) -> None:**
-    - Trains a machine learning model to distinguish between Stars, Galaxies, and QSOs.
-    - Parameters:
-      - `X_train` Training data with spectral features.
-      - `y_train` Target labels (Stars, Galaxies, QSOs).
+  - **Function: prepare_data(data: pd.DataFrame) -> Tuple:**
+   - Prepares the data for machine learning by cleaning, normalizing, and splitting it into training, validation, and testing sets.
+   - Parameters:
+     - `data`: The DataFrame containing spectral data.  
+   - Returns: Tuple containing X_train, X_val, y_train, y_val, and X_test. 
 
-  - **Function: predict(data: DataFrame) -> Series:**
-    - Predicts based on spectral data of astronomical objects.
-    - Parameters:
-      - `data` Data to predict on using the trained model
-    - Returns: A series of predicted labels.
+  - **Function: fit_model(X_train: pd.DataFrame, y_train: pd.Series, X_val: pd.DataFrame, y_val: pd.Series) -> RandomForestClassifier:**
+   - Fits a RandomForestClassifier model to the training data and evaluates it using the validation data. It also visualizes the confusion matrix.
+   - Parameters:
+     - `X_train`: The training data features.
+     - `y_train`: The training data labels.
+     - `X_val`: The validation data features.
+     - `y_val`: The validation data labels.
+   - Returns: The trained Random Forest classifier model.
 
-  - **Function: predict_proba(data: DataFrame) -> DataFrame:**
-    - Prediction probabilities.
-    - Parameters:
-      - `data` Data to predict on using the trained model
-    - Returns: Predicted probabilities for each class label.
+  - **Function: predict_class(model: RandomForestClassifier, data: pd.DataFrame) -> Series:**
+   - Predicts class labels for samples in the given data using the trained model.
+   - Parameters:
+     - `model`: The trained Random Forest classifier model.
+     - `data`: The data for which class labels need to be predicted.
+   - Returns: Predicted class labels.
+
+  - **Function: predict_proba(model: RandomForestClassifier, data: pd.DataFrame) -> DataFrame:**
+   - Predicts class probabilities for samples in the given data using the trained model.
+   - Parameters:
+     - `model`: The trained Random Forest classifier model.
+     - `data`: The data for which class probabilities need to be predicted.
+   - Returns: DataFrame containing predicted class probabilities.
+
 
 ### 8. Spectral Feature Extraction (Additional Feature 2, Feature Extractor in API diagram)
   - **Function: extract_spectral_features(data: DataFrame, continuum: DataFrame, sigma_level:float) -> DataFrame:**
@@ -127,4 +169,3 @@ This folder contains the draft of the Application Programming Interface (API) fo
 
 ## Documentation and Reporting
 - All design and implementation details will be documented and reviewed with the client prior to the final submission.
-
