@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - data-preprocessing
+  pull_request:
+    branches:
+      - dev
 
 jobs:
     coverage_data_preprocessing:
