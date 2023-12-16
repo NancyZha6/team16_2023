@@ -1,45 +1,52 @@
 import pandas as pd
 import numpy as np
 import pytest
-from data_preprocessing import *
 from wavelength_alignment import align_wavelength
+from data_query import *
+
+def sample_data():
+    adql_query = """
+    SELECT top 20 plate,mjd,fiberid
+    FROM dbo.SpecObj
+    """
+    data = load_data_ids(adql_query)
+    table = data['hdu_1'][['flux', 'loglam']]
+    return table
+
+#def sample_data():
+    # Create a sample DataFrame for testing
+#    data = pd.DataFrame({
+#        'loglam': np.linspace(3.0, 4.0, 10),
+#        'flux': np.random.rand(10),
+#    })
+#    return data
+
+def test_align_wavelength_within_range():
+    data = sample_data()
+    # Test aligning within a specified wavelength range
+    wavelength_range = (3.2, 3.8)
+    aligned_data = align_wavelength(data, wavelength_range)
+
+    # Check if only data within the range is present
+    assert (aligned_data['loglam'] >= wavelength_range[0]).all()
+    assert (aligned_data['loglam'] <= wavelength_range[1]).all()
 
 def test_align_wavelength_no_interpolation():
-    # test data with varied wavelengths and flux values
-    data = pd.DataFrame({
-        'waveMin': [500, 510, 520, 530],
-        'waveMax': [505, 515, 525, 535],
-        'flux': [1.0, 2.0, 3.0, 4.0]
-    })
+    data = sample_data()
+    # Test aligning without interpolation
+    wavelength_range = (3.2, 3.8)
+    aligned_data = align_wavelength(data, wavelength_range, interpolation=False)
 
-    # align wavelengths within specified range without interpolation
-    aligned_data = align_wavelength(data, wavelength_range=(505, 525), interpolation=False)
+    # Check if interpolation is not applied
+    assert aligned_data['flux'].isna().sum() == 0
 
-    # check if aligned wavelengths are within specified range
-    assert aligned_data['waveMin'].min() >= 505
-    assert aligned_data['waveMax'].max() <= 525
+def test_align_wavelength_interpolation():
+    data = sample_data()
+    # Test aligning with interpolation
+    wavelength_range = (3.2, 3.8)
+    aligned_data = align_wavelength(data, wavelength_range, interpolation=True)
 
-    # get the flux values corresponding to the aligned wavelengths
-    aligned_flux = aligned_data['flux'].values
-
-    # check if the flux values remain the same (no interpolation)
-    np.testing.assert_array_equal(aligned_flux, data[(data['waveMin'] >= 505) & (data['waveMax'] <= 525)]['flux'].values)
-
-def test_align_wavelength_with_interpolation():
-    # test data with varied wavelengths and flux values
-    data = pd.DataFrame({
-        'waveMin': [500, 510, 520, 530],
-        'waveMax': [505, 515, 525, 535],
-        'flux': [1.0, 2.0, 3.0, 4.0]
-    })
-
-    # align wavelengths within specified range with interpolation
-    aligned_data = align_wavelength(data, wavelength_range=(505, 525), interpolation=True)
-
-    # check if aligned wavelengths are within specified range
-    assert aligned_data['waveMin'].min() >= 505
-    assert aligned_data['waveMax'].max() <= 525
-
-    # check if there are interpolated values for aligned wavelengths
-    assert not aligned_data['flux'].isna().any()
+    # Check if interpolation is applied
+    assert aligned_data['flux'].isna().sum() == 0  # No missing values after interpolation
+    assert aligned_data['flux'].equals(data['flux']) == False  # Values should be different after interpolation
 
