@@ -1,0 +1,233 @@
+<h2 id="user-guide-astronomical-research-library-for-astronomical-data">User Guide: Astronomical Research Library for Astronomical Data</h2>
+<p>This guide provides an overview and usage instructions for functions designed to work with astronomical data from the Sloan Digital Sky Survey (SDSS)</p>
+<h3 id="data-query-module-data-query-in-api-diagram">1. Data Query Module (Data Query in API diagram)</h3>
+<h4 id="load_data_sqladql_query-str-none---pd.dataframe">load_data_sql(adql_query: str = None) -&gt; pd.DataFrame</h4>
+<p>This function retrieves SDSS data based on an ADQL query or identifiers. You can input your ADQL query as a string, and the function will return a pandas DataFrame containing the requested data.</p>
+<p><strong>Parameters:</strong> - <code>adql_query</code> (str, optional): ADQL query to retrieve data. Default is None.</p>
+<p><strong>Returns:</strong> - <code>pd.DataFrame</code>: DataFrame containing SDSS data defined by the query or identifiers.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>adql_query <span class="op">=</span> <span class="st">&quot;SELECT top 10 plate, mjd, fiberid FROM dbo.SpecObj&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> load_data_sql(adql_query)</span></code></pre></div>
+<h4 id="load_data_filefile-str---dict">load_data_file(file: str) -&gt; dict</h4>
+<p>This function loads SDSS data from a FITS file. You need to provide the file path of a FITS file that meets the SDSS format, and the function will return a dictionary containing DataFrames for each Header Data Unit (HDU) in the FITS file.</p>
+<p><strong>Parameters:</strong> - <code>file</code> (str): FITS file path that meets SDSS format.</p>
+<p><strong>Returns:</strong> - <code>dict</code>: Dictionary containing DataFrames for each HDU in the FITS file.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fits_file_path <span class="op">=</span> <span class="st">&#39;path/to/sdss_data.fits&#39;</span> <span class="co"># e.g. &#39;spectrum.fits&#39;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dataframes <span class="op">=</span> load_data_file(fits_file_path)</span></code></pre></div>
+<h4 id="load_data_idsids_query-str-none---dict">load_data_ids(ids_query: str = None) -&gt; dict</h4>
+<p>This function retrieves SDSS data based on plateid, fiberid, and mjd. You can input an ADQL query to extract plateid, mjd, and fiberid, or provide a fits file that meets the SDSS format. The function returns a dictionary containing DataFrames for each HDU with extracted spectra.</p>
+<p><strong>Parameters:</strong> - <code>ids_query</code> (str, optional): ADQL query to extract plateid, fiberid, and mjd. Default is None.</p>
+<p><strong>Returns:</strong> - <code>dict</code>: Dictionary containing DataFrames for each HDU with extracted spectra.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ids_query <span class="op">=</span> <span class="st">&quot;SELECT plate, fiberid, mjd FROM dbo.SpecObj WHERE class IN (&#39;STAR&#39;, &#39;GALAXY&#39;, &#39;QSO&#39;)&quot;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dataframes <span class="op">=</span> load_data_ids(ids_query)</span></code></pre></div>
+<h4 id="load_data_constraintsconstraints-dict---pd.dataframe">load_data_constraints(constraints: dict) -&gt; pd.DataFrame</h4>
+<p>This function retrieves SDSS data based on constraints provided in the form of a dictionary. You need to pass a dictionary of constraints to put in the WHERE statement of the query. The function constructs the query and returns a pandas DataFrame containing SDSS data defined by the constraints.</p>
+<p><strong>Parameters:</strong> - <code>constraints (dict)</code>: Dictionary of constraints to put in the WHERE statement of the query.</p>
+<p><strong>Returns:</strong> - <code>pd.DataFrame</code>: DataFrame containing SDSS data defined by the constraints.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>constraints <span class="op">=</span> {<span class="st">&#39;column1&#39;</span>: [value1, value2], <span class="st">&#39;column2&#39;</span>: [value3, value4]}</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> load_data_constraints(constraints)</span></code></pre></div>
+<h3 id="data-preprocessing-module-data-preprocessing-in-api-diagram">2. Data Preprocessing Module (Data Preprocessing in API diagram)</h3>
+<h4 id="load_dataadql_query-str---pd.dataframe"><code>load_data(adql_query: str) -&gt; pd.DataFrame</code></h4>
+<p>This function fetches data from the SDSS database using an Astronomical Data Query Language (ADQL) query. Simply input your query as a string.</p>
+<p><strong>Parameters:</strong> - <code>adql_query</code> (str): The query string in ADQL format to retrieve data.</p>
+<p><strong>Returns:</strong> - <code>pd.DataFrame</code>: A DataFrame containing the data fetched from SDSS based on the ADQL query.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>myquery <span class="op">=</span> <span class="st">&#39;select top 10 objid, ra, dec, r &#39;</span> <span class="co"># note the space at the end of this string - important</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>myquery <span class="op">+=</span> <span class="st">&#39;from galaxy &#39;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>myquery <span class="op">+=</span> <span class="st">&#39;where clean = 1&#39;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>load_data(myquery)</span></code></pre></div>
+<h4 id="normalizedata-pd.dataframe-exclude_columnsobjectid---pd.dataframe"><code>normalize(data: pd.DataFrame, exclude_columns=['objectid']) -&gt; pd.DataFrame</code></h4>
+<p>Normalizes the <strong>numerical columns</strong> in a DataFrame. It normalizes each numerical column by subtracting its mean and dividing by its standard deviation. If the standard deviation is zero, it only subtracts the mean. It will ignore non-numerical columns</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> (pd.DataFrame): DataFrame containing the spectral data to normalize.</li>
+<li><code>exclude_columns</code> (list, optional): List of columns to exclude from normalization. Defaults to [‘objectid’].</li>
+</ul>
+<p><strong>Returns:</strong> - <code>pd.DataFrame</code>: A DataFrame containing the normalized spectral data.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exclude &#39;objectid&#39; from normalization</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>normalized_data <span class="op">=</span> normalize(data, exclude_columns<span class="op">=</span>[<span class="st">&#39;objectid&#39;</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Resulting DataFrame with normalized spectral data</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(normalized_data)</span></code></pre></div>
+<p><strong>Note:</strong> This function will throw an exception if the input DataFrame is empty. Ensure that the DataFrame contains the necessary spectral data before applying normalization.</p>
+<h4 id="remove_outliersdata-pd.dataframe-threshold-float-to_remove_columns-list---pd.dataframe"><code>remove_outliers(data: pd.DataFrame, threshold: float, to_remove_columns: list) -&gt; pd.DataFrame</code></h4>
+<p>Removes outliers from the spectral data based on the specified percentile threshold for selected columns.</p>
+<p><strong>Parameters:</strong> - <code>data</code> (pd.DataFrame): DataFrame containing the spectral data to remove outliers. - <code>threshold</code> (float): The percentile threshold to remove outliers. For example, threshold=0.1 removes the top and bottom 5% of data as outliers. to_remove_columns (list): List of columns to perform outlier removal on. - <code>to_remove_columns</code> (list): a list of columns to perform outlier removal on</p>
+<p><strong>Returns:</strong> - <code>pd.DataFrame</code>: The DataFrame with outliers removed.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove outliers from &#39;flux_A&#39; and &#39;flux_B&#39;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>cleaned_data <span class="op">=</span> remove_outliers(data, threshold<span class="op">=</span><span class="fl">0.1</span>, to_remove_columns<span class="op">=</span>[<span class="st">&#39;flux_A&#39;</span>, <span class="st">&#39;flux_B&#39;</span>])</span></code></pre></div>
+<p><strong>Note:</strong> This function will throw an exception if the input DataFrame is empty.</p>
+<h4 id="interpolatespectra-flux_columnflux-wavelength_columnwavelength---pd.dataframe"><code>interpolate(spectra, flux_column='flux', wavelength_column='wavelength') -&gt; pd.DataFrame</code></h4>
+<p>Interpolates values in the spectra DataFrame.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>spectra</code> (pd.DataFrame): DataFrame containing flux and wavelength columns.</li>
+<li><code>flux_column</code> (str, optional): Name of the flux column.</li>
+<li><code>wavelength_column</code> (str, optional): Name of the wavelength column.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>pd.DataFrame</code>: Interpolated and subsampled DataFrame.</li>
+</ul>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>interpolated_df <span class="op">=</span> interpolate(spectra)</span></code></pre></div>
+<h4 id="correct_redshiftspectra-wavelenght_columnwavelength-redshift_columnredshift---pd.dataframe"><code>correct_redshift(spectra, wavelenght_column='wavelength', redshift_column='redshift') -&gt; pd.DataFrame</code></h4>
+<p>Corrects the redshift in the wavelengths of the spectra DataFrame.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>spectra</code> (pd.DataFrame): DataFrame containing ‘wavelength’ and ‘flux’ columns.</li>
+<li><code>wavelenght_column</code> (str): name of the column in spectra datafram that contains wavelength</li>
+<li><code>redshift_column</code> (str, optional): Name of the redshift column.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>pd.DataFrame</code>: DataFrame with corrected wavelengths.</li>
+</ul>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>corrected_df <span class="op">=</span> correct_redshift(spectra)</span></code></pre></div>
+<h3 id="metadata-extraction-module-metadata-extraction-in-api-diagram">3. Metadata Extraction Module (Metadata Extraction in API diagram)</h3>
+<h4 id="extract_metadatadata-pd.dataframe-identifierstrue-equivalent_widthtrue-coordinatestrue-redshiftstrue-other_fieldsnone---pd.dataframe"><code>extract_metadata(data: pd.DataFrame, identifiers=True, equivalent_width=True, coordinates=True, redshifts=True, other_fields=None) -&gt; pd.DataFrame</code></h4>
+<p>Extracts metadata from a DataFrame containing spectral data based on specified parameters.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> (pd.DataFrame): DataFrame containing spectral data.</li>
+<li><code>identifiers</code> (bool, optional): If True, extract object identifiers. Defaults to True.</li>
+<li><code>equivalent_width</code> (bool, optional): If True, extract equivalent widths. Defaults to True.</li>
+<li><code>coordinates</code> (bool, optional): If True, extract object coordinates (red ascension and declination). Defaults to True.</li>
+<li><code>redshifts</code> (bool, optional): If True, extract redshifts. Defaults to True.</li>
+<li><code>other_fields</code> (List[str], optional): List of other fields to extract from the DataFrame. Defaults to None.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>pd.DataFrame</code>: DataFrame containing the extracted metadata.</li>
+</ul>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract metadata with default parameters</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>metadata_default <span class="op">=</span> extract_metadata(spectral_data)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally, customize the extraction</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>metadata_customized <span class="op">=</span> extract_metadata(spectral_data, equivalent_width<span class="op">=</span><span class="va">False</span>, redshifts<span class="op">=</span><span class="va">False</span>, other_fields<span class="op">=</span>[<span class="st">&#39;field1&#39;</span>, <span class="st">&#39;field2&#39;</span>])</span></code></pre></div>
+<h3 id="wavelength-alignment-module-wavelength-alignment-in-api-diagram">4. Wavelength Alignment Module (Wavelength Alignment in API diagram)</h3>
+<h4 id="align_wavelengthdata-pd.dataframe-wavelength_range-tuplefloat-float-interpolation-bool-false---pd.dataframe"><code>align_wavelength(data: pd.DataFrame, wavelength_range: Tuple[float, float], interpolation: bool = False) -&gt; pd.DataFrame</code></h4>
+<p>Aligns the wavelength for all spectra within a predefined range in a DataFrame.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> (pd.DataFrame): DataFrame containing ‘wavelength’ and ‘flux’ columns.</li>
+<li><code>wavelength_range (Tuple[float, float])</code>: Tuple representing the range of wavelengths to align.</li>
+<li><code>interpolation (bool, optional)</code>: If True, perform interpolation. Default is False.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>pd.DataFrame</code>: DataFrame with aligned wavelength spectra.</li>
+</ul>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Align the wavelength within the specified range without interpolation</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>aligned_data <span class="op">=</span> align_wavelength(data, wavelength_range<span class="op">=</span>(<span class="dv">505</span>, <span class="dv">525</span>), interpolation<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally, align with interpolation</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>aligned_data_interpolated <span class="op">=</span> align_wavelength(data, wavelength_range<span class="op">=</span>(<span class="dv">505</span>, <span class="dv">525</span>), interpolation<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<h3 id="data-augmentation-module-data-augmentation-in-api-diagram">5. Data Augmentation Module (Data Augmentation in API diagram)</h3>
+<h4 id="standard_derivativeflux-numpy.ndarray-wavelength-numpy.ndarray---numpy.ndarray">standard_derivative(flux: numpy.ndarray, wavelength: numpy.ndarray) -&gt; numpy.ndarray</h4>
+<p>This function calculates the standard derivative of flux with respect to wavelength.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>flux</code> (numpy.ndarray): A numpy array of flux data.</li>
+<li><code>wavelength</code> (numpy.ndarray): A numpy array of wavelength data.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>numpy.ndarray</code>: The derivative of flux with respect to wavelength.</li>
+</ul>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>augmented_data_deriv <span class="op">=</span> augment_data(corrected_data, [<span class="st">&#39;standard_derivative&#39;</span>])</span></code></pre></div>
+<h4 id="fractional_derivativeflux-numpy.ndarray-wavelength-numpy.ndarray-order-float-h-float-1e-5-max_terms-int-50---numpy.ndarray">fractional_derivative(flux: numpy.ndarray, wavelength: numpy.ndarray, order: float, h: float = 1e-5, max_terms: int = 50) -&gt; numpy.ndarray</h4>
+<p>This function calculates the fractional derivative of flux with respect to wavelength using the Grünwald-Letnikov approach.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>flux</code> (numpy.ndarray): The flux data (as a numpy array).</li>
+<li><code>wavelength</code> (numpy.ndarray): The wavelength data (as a numpy array).</li>
+<li><code>order</code> (float): The order of the derivative (fractional).</li>
+<li><code>h</code> (float): The step size for numerical differentiation (default is 1e-5).</li>
+<li><code>max_terms</code> (int): Maximum number of terms to include in the sum (default is 50).</li>
+</ul>
+<p><strong>Returns:</strong> - <code>numpy.ndarray</code>: The fractional derivative of flux with respect to wavelength.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>augmented_data_frac <span class="op">=</span> augment_data(corrected_data, [<span class="st">&#39;fractional_derivative&#39;</span>], <span class="fl">0.5</span>)</span></code></pre></div>
+<h4 id="augment_datadata-pd.dataframe-methods-list-frac_order-float-none---pd.dataframe">augment_data(data: pd.DataFrame, methods: list, frac_order: float = None) -&gt; pd.DataFrame</h4>
+<p>This function computes derivatives and fractional derivatives of flux with respect to wavelength, appending them to each preprocessed spectrum in the DataFrame.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> (pd.DataFrame): The DataFrame containing spectral data to augment. Assumes ‘flux’ and ‘wavelength’ columns are present.</li>
+<li><code>methods</code> (list): A list of callable functions that define the augmentation methods to be applied.</li>
+<li><code>frac_order</code> (float): The order of the fractional derivative.</li>
+</ul>
+<p><strong>Returns:</strong> - <code>pd.DataFrame</code>: The augmented DataFrame.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>augmented_data <span class="op">=</span> augment_data(corrected_data, [<span class="st">&#39;standard_derivative&#39;</span>,<span class="st">&#39;fractional_derivative&#39;</span>], <span class="fl">0.5</span>)</span></code></pre></div>
+<h3 id="machine-learning-module-additional-feature-1-astronomical-classifier-in-api-diagram">6. Machine Learning Module (Additional Feature 1, Astronomical Classifier in API diagram)</h3>
+<h4 id="prepare_datadata-pd.dataframe---tuplepd.dataframe-pd.dataframe-pd.series-pd.series-pd.dataframe">prepare_data(data: pd.DataFrame) -&gt; Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.DataFrame]</h4>
+<p>This function prepares the data for machine learning by cleaning, normalizing, and splitting it into training, validation, and testing sets.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> (pd.DataFrame): The DataFrame containing spectral data.</li>
+</ul>
+<p><strong>Returns:</strong> - <code>Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.DataFrame]</code>: Tuple containing X_train, X_val, y_train, y_val, and X_test.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>X_train, X_val, y_train, y_val, X_test <span class="op">=</span> prepare_data(data3)</span></code></pre></div>
+<h4 id="fit_modelx_train-pd.dataframe-y_train-pd.series-x_val-pd.dataframe-y_val-pd.series---randomforestclassifier">fit_model(X_train: pd.DataFrame, y_train: pd.Series, X_val: pd.DataFrame, y_val: pd.Series) -&gt; RandomForestClassifier</h4>
+<p>This function fits a RandomForestClassifier model to the training data and evaluates it using the validation data. It also visualizes the confusion matrix.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>X_train</code> (pd.DataFrame): The training data features.</li>
+<li><code>y_train</code> (pd.Series): The training data labels.</li>
+<li><code>X_val</code> (pd.DataFrame): The validation data features.</li>
+<li><code>y_val</code> (pd.Series): The validation data labels.</li>
+</ul>
+<p><strong>Returns:</strong> - <code>RandomForestClassifier</code>: The trained Random Forest classifier model.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model<span class="op">=</span>fit_model(X_train,y_train,X_val,y_val)</span></code></pre></div>
+<h4 id="predict_classmodel-randomforestclassifier-data-pd.dataframe---pd.series">predict_class(model: RandomForestClassifier, data: pd.DataFrame) -&gt; pd.Series</h4>
+<p>This function predicts class labels for samples in the given data using the trained model.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>model</code> (RandomForestClassifier): The trained Random Forest classifier model.</li>
+<li><code>data</code> (pd.DataFrame): The data for which class labels need to be predicted.</li>
+</ul>
+<p><strong>Returns:</strong> - <code>pd.Series</code>: Predicted class labels.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>prediction<span class="op">=</span>predict_class(model,X_test)</span></code></pre></div>
+<h4 id="predict_probamodel-randomforestclassifier-data-pd.dataframe---pd.dataframe">predict_proba(model: RandomForestClassifier, data: pd.DataFrame) -&gt; pd.DataFrame</h4>
+<p>This function predicts class probabilities for samples in the given data using the trained model.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>model</code> (RandomForestClassifier): The trained Random Forest classifier model.</li>
+<li><code>data</code> (pd.DataFrame): The data for which class probabilities need to be predicted.</li>
+</ul>
+<p><strong>Returns:</strong> - <code>pd.DataFrame</code>: DataFrame containing predicted class probabilities.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>prediction_prob<span class="op">=</span>predict_proba(model,X_test)</span></code></pre></div>
+<h3 id="spectral-feature-extraction-additional-feature-2-feature-extractor-in-api-diagram">7. Spectral Feature Extraction (Additional Feature 2, Feature Extractor in API diagram)</h3>
+<h4 id="extract_spectral_featuresdata-pd.dataframe---np.array-np.array-none">extract_spectral_features(data: pd.DataFrame) -&gt; np.array, np.array, None</h4>
+<p>This function identifies emission and absorption lines based on residuals in the provided DataFrame.</p>
+<p><strong>Parameters:</strong> - <code>data</code> (pd.DataFrame): The data with columns ‘loglam’, ‘flux’, and ‘model’.</p>
+<p><strong>Returns:</strong> - <code>np.array</code>: The first array is provided: wavelengths with emission - <code>np.array</code>: The second array is provided: wavelengths with absorption</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>emission_wavelengths, absorption_wavelengths <span class="op">=</span> extract_spectral_features(data)</span></code></pre></div>
+<h3 id="visualization-module-spectral-visualizer-in-api-diagram">8. Visualization Module (Spectral Visualizer in API diagram)</h3>
+<h4 id="plot_spectrumdf-pd.dataframe-continuumtrue-emission_linesnone-absorption_linesnone---none">plot_spectrum(df: pd.DataFrame, continuum=True, emission_lines=None, absorption_lines=None) -&gt; None</h4>
+<p>This function uses matplotlib to create static plots of the spectral data with options for overlay of the continuum data and annotations of emission and absorption spectra.</p>
+<p><strong>Parameters:</strong> - <code>data</code> (pd.DataFrame): The data with columns ‘loglam’, ‘flux’, and ‘model’.</p>
+<p><strong>Usage:</strong></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plot_spectrum(data, emission_lines <span class="op">=</span> emission_wavelengths, absorption_lines <span class="op">=</span> absorption_wavelength)</span></code></pre></div>
+<hr />
+<h3 id="important-notes">Important Notes:</h3>
+<ul>
+<li>Ensure you have the necessary packages (<code>numpy</code>, <code>pandas</code> and <code>astroquery</code>) installed in your Python environment.</li>
+<li>These functions are specifically designed for processing astronomical data and may not be suitable for other types of data without modifications.</li>
+<li>Handle the data responsibly, especially when it comes to managing large datasets or sensitive information.</li>
+</ul>
