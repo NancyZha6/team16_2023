@@ -8,7 +8,7 @@ on:
 jobs:
     test_integration:
       name: Test module integration
-      runs-on: ubuntu-latest
+      runs-on: ${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}
       steps:
         - uses: actions/checkout@v3
         - uses: actions/setup-python@v3 
@@ -25,7 +25,7 @@ jobs:
             pytest tests/test_integration.py
     test_data_query:
       name: Test first module data query
-      runs-on: ubuntu-latest
+      runs-on: ${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}
       steps:
         - uses: actions/checkout@v3
         - uses: actions/setup-python@v3 
@@ -42,7 +42,7 @@ jobs:
             pytest tests/test_data_query.py
     test_data_preprocessing:
       name: Test first module data preprocessing
-      runs-on: ubuntu-latest
+      runs-on: ${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}
       steps:
         - uses: actions/checkout@v3
         - uses: actions/setup-python@v3 
@@ -59,7 +59,7 @@ jobs:
             pytest tests/test_data_preprocessing.py
     test_metadata_extraction:
       name: Test module MetadataExtraction
-      runs-on: ubuntu-latest
+      runs-on: ${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}
       steps:
         - uses: actions/checkout@v3
         - uses: actions/setup-python@v3 
@@ -76,7 +76,7 @@ jobs:
             pytest tests/test_metadata_extraction.py
     test_wavelength_alignment:
       name: Test Wavelength Alignment module
-      runs-on: ubuntu-latest
+      runs-on: ${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}
       steps:
         - uses: actions/checkout@v3
         - uses: actions/setup-python@v3 
@@ -93,7 +93,7 @@ jobs:
             pytest tests/test_wavelength_alignment.py
     test_data_augmentation:
       name: Test Data Augmentation module
-      runs-on: ubuntu-latest
+      runs-on: ${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}
       steps:
         - uses: actions/checkout@v3
         - uses: actions/setup-python@v3 
@@ -110,7 +110,7 @@ jobs:
             pytest tests/test_data_augmentation.py
     test_machine_learning:
       name: Test Machine Learning Module
-      runs-on: ubuntu-latest
+      runs-on: ${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}
       steps:
         - uses: actions/checkout@v3
         - uses: actions/setup-python@v3 
@@ -127,7 +127,7 @@ jobs:
             pytest tests/test_machine_learning.py
     test_spectral_feature_extraction:
       name: Test Spectral Feature Extraction module
-      runs-on: ubuntu-latest
+      runs-on: ${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}
       steps:
         - uses: actions/checkout@v3
         - uses: actions/setup-python@v3 
