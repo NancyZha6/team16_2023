@@ -1,7 +1,7 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
-from data_preprocessing import normalize, remove_outliers
+from .data_preprocessing import normalize, remove_outliers
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
