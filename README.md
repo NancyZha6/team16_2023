@@ -5,4 +5,8 @@
 
 ![Build Status](https://code.harvard.edu/CS107/team16_2023/actions/workflows/coverage.yml/badge.svg?branch=data-preprocessing)
 
-This is a readme file for team 16 project. More details are expected in the future.
+The library API is a comprehensive tool to query astronomical data from SDSS, build classification models for predicting stars, galaxies, and QSOs. This API provides a wide range of functionalities organized into several modules to facilitate data retrieval, preprocessing, metadata extraction, wavelength alignment, visualization, data augmentation, machine learning, and spectral feature extraction. 
+
+For specific usage, please use this usage guide (LINK), along with our tutorial notebook(LINK).
+Guidance on installing the package (LINK)
+Guidance on running integration test and unit tests locally (LINK)
