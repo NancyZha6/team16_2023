@@ -2,6 +2,7 @@
 import pytest
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from data_query import load_data_sql, load_data_file, load_data_ids, load_data_constraints
 import data_preprocessing 
 import metadata_extraction 
@@ -9,6 +10,7 @@ import wavelength_alignment
 import data_augmentation
 import machine_learning
 import spectral_feature_extraction
+import visualization
 
 # Sample ADQL query for testing
 ADQL_QUERY = """
@@ -107,3 +109,12 @@ def test_data_processing_pipeline():
     assert error is None
     assert isinstance(emission, np.ndarray)
     assert isinstance(absorption, np.ndarray) 
+    
+    # Step7: Visualization
+    visualization.plot_spectrum(merged_meta)
+    plot1 = plt.gcf()
+    assert plot1 is not None, "No figure has been created"
+    
+    visualization.plot_spectrum(merged_meta, emission_lines=emission, absorption_lines=absorption)
+    plot2 = plt.gcf()
+    assert plot2 is not None, "No figure has been created"
