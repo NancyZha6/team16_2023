@@ -1,8 +1,8 @@
 # Team 16 project
 
-![Build Status](https://code.harvard.edu/CS107/team16_2023/actions/workflows/test.yml/badge.svg?branch=main)
+![Build Status](https://code.harvard.edu/CS107/team16_2023/actions/workflows/test.yml/badge.svg?branch=dev)
 
-![Build Status](https://code.harvard.edu/CS107/team16_2023/actions/workflows/coverage.yml/badge.svg?branch=main)
+![Build Status](https://code.harvard.edu/CS107/team16_2023/actions/workflows/coverage.yml/badge.svg?branch=dev)
 
 This library is published at https://test.pypi.org/project/astronomy-research-team16/.
 
