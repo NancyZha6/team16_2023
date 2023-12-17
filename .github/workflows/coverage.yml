@@ -8,7 +8,7 @@ on:
 jobs:
     coverate_unit_test:
       name: Test coverage for unit tests
-      runs-on: ubuntu-latest
+      runs-on: ${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}
       steps:
         - uses: actions/checkout@v3
         - uses: actions/setup-python@v3 
@@ -25,7 +25,7 @@ jobs:
           run: |
             pytest --cov=. tests/test_data_query.py
             pytest --cov=. tests/test_data_preprocessing.py
-            pytest --cov=. tests/test_metadata_extractor.py
+            pytest --cov=. tests/test_metadata_extraction.py
             pytest --cov=. tests/test_wavelength_alignment.py
             pytest --cov=. tests/test_data_augmentation.py
             pytest --cov=. tests/test_machine_learning.py

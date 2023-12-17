@@ -1,3 +1,4 @@
+# NEW INTEGRATION TEST 
 import pytest
 import pandas as pd
 from data_query import load_data_sql, load_data_file, load_data_ids, load_data_constraints
@@ -29,6 +30,11 @@ def test_data_processing_pipeline():
     # Step 0.2: Load data based on plateid, fiberid, and mjd
     ids_query = "SELECT top 10 plate, fiberid, mjd FROM dbo.SpecObj"
     data_ids_result = load_data_ids(ids_query)
+    metadata_1 = data_ids_result['hdu_2']
+    metadata_2 = data_ids_result['hdu_3']
+    metadata_2 = pd.merge(metadata_1, metadata_2, left_index=True, right_index=True)
+    metadata_1 = data_ids_result['hdu_1']
+    merged_meta = pd.merge(metadata_1, metadata_2, left_index=True, right_index=True)
     assert isinstance(data_ids_result, dict), "load_data_ids should return a dictionary of DataFrames"
 
     # Test case 0.3: Valid constraints with additional constraint
@@ -42,7 +48,7 @@ def test_data_processing_pipeline():
     # check that data is returned 
     assert not data.empty, "load_data should return non-empty DataFrame"
 
-    normalized_data = data_preprocessing.normalize(data_ids_result['hdu_1'])
+    normalized_data = data_preprocessing.normalize(merged_meta)
     assert isinstance(normalized_data, pd.DataFrame), "normalize should return a DataFrame"
     
     data_no_outliers = data_preprocessing.remove_outliers(normalized_data, threshold=0.1,to_remove_columns=["flux"])
@@ -58,12 +64,13 @@ def test_data_processing_pipeline():
     assert not redshift_corrected_data.empty, "data preprocessing should return non-empty DataFrame"
     
     # Step 2: Extract metadata
-#    extracted_metadata = metadata_extraction.extract_metadata(redshift_corrected_data, identifiers = True, 
-#                                                                                        coordinates = True,
-#                                                                                            equivalent_width = True,
-#                                                                                            redshifts = True,
-#                                                                                            other_fields = None)
-#    assert isinstance(extracted_metadata, pd.DataFrame), "extract_metadata should return a DataFrame"
+    # Assuming 'data' is a Pandas DataFrame
+    extracted_metadata = metadata_extraction.extract_metadata(redshift_corrected_data, identifiers = True, 
+                                                                                        coordinates = True,
+                                                                                            equivalent_width = True,
+                                                                                            redshifts = True,
+                                                                                            other_fields = None)
+    assert isinstance(extracted_metadata, pd.DataFrame), "extract_metadata should return a DataFrame"
 
     # Step 3: Wavelength alignment
     aligned_data = wavelength_alignment.align_wavelength(redshift_corrected_data, wavelength_range=(-0.5, 2), interpolation=True)

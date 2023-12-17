@@ -69,13 +69,13 @@ This folder contains the draft of the Application Programming Interface (API) fo
     - Returns: Dataframe containing data with red shift corrected.
 
 ### 3. Metadata Extraction Module (Metadata Extraction in API diagram)
-  - **Function: extract_metadata(data: DataFrame, identifiers: bool = True, coordinates: bool = True, chemical_abundances: bool = True, redshifts: bool = True, other_fields: List[str] = None) -> DataFrame:**
-    - Extracts metadata from the spectral data based on user-defined parameters.
+  - **Function: extract_metadata(data: DataFrame, identifiers: bool = True, coordinates: bool = True, redshifts: bool = True, other_fields: List[str] = None) -> DataFrame:**
+    - Extracts user-defined parameters of metadata from the spectral data.
     - Parameters:
-      - `data`: the data to extract metadata from
-      - `identifiers`: If True, extract object identifiers.
-      - `coordinates`: If True, extract object coordinates.
-      - `redshifts`: If True, extract redshifts.
+      - `data`: the pandas dataframe of the data to extract metadata from
+      - `identifiers`: If True, extract object identifier: Spectral Object ID (SPECOBJID).
+      - `coordinates`: If True, extract object coordinates: right ascension (RA), declination (DEC).
+      - `redshifts`: If True, extract redshift (Z).
       - `other_fields`: A list of other fields to extract if specified.
     - Returns: Dataframe containing the extracted metadata.
 
@@ -89,15 +89,7 @@ This folder contains the draft of the Application Programming Interface (API) fo
        - `interpolation`: If True, perform interpolation. Default is False.
     - Returns: DataFrame with aligned wavelength spectra.
 
-### 5. Visualization Module (Spectral Visualizer in API diagram)
-  - **Function: visualize_spectrum(data: DataFrame, continuum_overlay: bool = True) -> None:**
-    - Uses matplotlib to create static plots of the spectral data with options for overlays and annotations.
-    - Parameters:
-      - `data`: The DataFrame containing spectral data to be plotted.
-      - `continuum_overlay`: A boolean indicating whether a continuum overlay should be added to the plot.
-    - Returns: A matplotlib Figure object of the plotted data.
-
-### 6. Data Augmentation Module (Data Augmentation in API diagram)
+### 5. Data Augmentation Module (Data Augmentation in API diagram)
   - **Function: standard_derivative(flux: numpy.ndarray, wavelength: numpy.ndarray) -> array:**
     - Calculates the standard derivative of flux with respect to wavelength.
     - Parameters:
@@ -123,7 +115,7 @@ This folder contains the draft of the Application Programming Interface (API) fo
       - `frac_order`: The order of the fractional derivative.
    - Returns: The augmented DataFrame.
 
-### 7. Machine Learning Module (Additional Feature 1, Astronomical Classifier in API diagram)
+### 6. Machine Learning Module (Additional Feature 1, Astronomical Classifier in API diagram)
   - **Function: prepare_data(data: pd.DataFrame) -> Tuple:**
    - Prepares the data for machine learning by cleaning, normalizing, and splitting it into training, validation, and testing sets.
    - Parameters:
@@ -153,15 +145,23 @@ This folder contains the draft of the Application Programming Interface (API) fo
      - `data`: The data for which class probabilities need to be predicted.
    - Returns: DataFrame containing predicted class probabilities.
 
-
-### 8. Spectral Feature Extraction (Additional Feature 2, Feature Extractor in API diagram)
-  - **Function: extract_spectral_features(data: DataFrame, continuum: DataFrame, sigma_level:float) -> DataFrame:**
-    - Extracts spectral features defining emission and absorption lines.
+### 7. Spectral Feature Extraction (Additional Feature 2, Feature Extractor in API diagram)
+  - **Function: extract_spectral_features(data: pd.DataFrame) -> array:**
+    - Extract spectral features defining emission and absorption lines as those with flux levels exceeding 2 sigma from the continuum.
     - Parameters:
-      - `data`: The DataFrame containing the observed spectral data which includes flux values for various wavelengths.
-      - `continuum`: The DataFrame containing the estimated continuum levels corresponding to the wavelength.
-      - `sigma_level`: The number of standard deviations used to identify significant deviations from the continuum.
-    - Returns: DataFrame containing the identified spectral features.
+      - `data`: The DataFrame containing the observed spectral data which includes `flux`, `loglam` (log of wavelength), and `model` (continuum).
+    - Returns: Array 1 containing the wavelength of emission, array 2 containing the wavelengh of absorption, and array 3 is the potential error message.
+
+### 8. Visualization Module (Spectral Visualizer in API diagram)
+  - **Function: plot_spectrum(df: pd.DataFrame, continuum=True, emission_lines=None, absorption_lines=None) -> None:**
+    - Uses matplotlib to create static plots of the spectral data with options for overlay of the continuum data and annotations of emission and absorption spectra.
+    - Parameters:
+      - `data`: The DataFrame containing spectral data to be plotted.
+      - `continuum_overlay`: A boolean indicating whether a continuum overlay should be added to the plot.
+      - `emission_lines`: An np.array with emission spectra data to be plotted; this can be derived from the Spectral Feature Extraction module
+      - `absorption_lines`: An np.array with absorption spectra data to be plotted; this can be derived from the Spectral Feature Extraction module
+     
+    - Returns: A matplotlib figure object of the plotted data.
 
 ## Implementation Specifications
 - Developers will select and implement at least two additional features from Annex B.
