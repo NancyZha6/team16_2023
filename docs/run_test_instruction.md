@@ -12,8 +12,8 @@ bash run_cs107_docker.sh ./
 run pip install -r tests/requirements.txt at the root of the repo to install necessary dependencies 
 
 #### Run integration test 
-copy file test_integration.py and spectrum.fits into root directory and run pytest test_integration.py.
+copy file test_integration.py and spectrum.fits into src/astronomy_research_team16/ and run pytest test_integration.py.
 Note we tested the whole flow in test_data_processing_pipeline(). You will see 1 pass if everything works 
 
 #### Run unit test 
-copy the specific unit test file into root directory and run pytest <unit_test>.py Replace unit test with the specific test file name  
+copy the specific unit test file into src/astronomy_research_team16/ and run pytest <unit_test>.py Replace unit test with the specific test file name  
