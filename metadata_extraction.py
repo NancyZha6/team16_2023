@@ -1,3 +1,4 @@
+# NEW META DATA EXTRACTION
 from typing import List
 import pandas as pd
 
@@ -9,37 +10,37 @@ def extract_metadata(data, identifiers=True, equivalent_width=True, coordinates=
 
     # Extract object identifiers
     if identifiers:
-        if 'specObjID' in data.columns:
-            metadata['object_id'] = data['specObjID']
+        if 'SPECOBJID' in data.columns:
+            metadata['specObjID'] = data['SPECOBJID']
         else:
             raise Exception("Missing 'specObjID' column in the provided DataFrame")
 
     # Extract equivalent_widths
     if equivalent_width:
-        if 'h_beta_eqw' in data.columns:
-            metadata['equivalent_width'] = data['h_beta_eqw']
+        if 'LINEEW' in data.columns:
+            metadata['equivalent_width'] = data['LINEEW']
         else:
-            raise Exception("Missing 'h_beta_eqw' column in the provided DataFrame")
+            raise Exception("Missing 'LINEEW' column in the provided DataFrame")
 
     # Extract object coordinates
     if coordinates:
-        if 'ra' in data.columns and 'dec' in data.columns:
-            metadata['coord.red_ascension'] = data['ra']
-            metadata['coord.declination'] = data['dec']
+        if 'RA' in data.columns and 'DEC' in data.columns:
+            metadata['coord.red_ascension'] = data['RA']
+            metadata['coord.declination'] = data['DEC']
         else:
             missing_columns = []
-            if 'ra' not in data.columns:
-                missing_columns.append("'ra'")
-            if 'dec' not in data.columns:
-                missing_columns.append("'dec'")
+            if 'RA' not in data.columns:
+                missing_columns.append("'RA'")
+            if 'DEC' not in data.columns:
+                missing_columns.append("'DEC'")
             raise Exception(f"Missing {', '.join(missing_columns)} column(s) in the provided DataFrame")
 
     # Extract redshifts
     if redshifts:
-        if 'z' in data.columns:
-            metadata['redshift'] = data['z']
+        if 'Z' in data.columns:
+            metadata['redshift'] = data['Z']
         else:
-            raise Exception("Missing 'z' column in the provided DataFrame")
+            raise Exception("Missing 'Z' column in the provided DataFrame")
 
     # Extract other specified fields
     if other_fields:
