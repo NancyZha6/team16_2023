@@ -22,7 +22,7 @@ def test_data_processing_pipeline():
     assert isinstance(data_query_result, pd.DataFrame), "load_data_sql should return a DataFrame"
 
     # Step 0.1: Load data from FITS file
-    fits_file = "spectrum.fits"
+    fits_file = "tests/spectrum.fits"
     data_file_result = load_data_file(fits_file)
     assert isinstance(data_file_result, dict), "load_data_file should return a dictionary of DataFrames"
 
