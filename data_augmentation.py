@@ -1,7 +1,5 @@
 import numpy as np
 from scipy.special import gamma
-from data_query import *
-
 
 def standard_derivative(flux, wavelength):
     """
