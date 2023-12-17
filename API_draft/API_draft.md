@@ -153,12 +153,15 @@ This folder contains the draft of the Application Programming Interface (API) fo
     - Returns: Array 1 containing the wavelength of emission, array 2 containing the wavelengh of absorption, and array 3 is the potential error message.
 
 ### 8. Visualization Module (Spectral Visualizer in API diagram)
-  - **Function: visualize_spectrum(data: DataFrame, continuum_overlay: bool = True) -> None:**
-    - Uses matplotlib to create static plots of the spectral data with options for overlays and annotations.
+  - **Function: plot_spectrum(df: pd.DataFrame, continuum=True, emission_lines=None, absorption_lines=None) -> None:**
+    - Uses matplotlib to create static plots of the spectral data with options for overlay of the continuum data and annotations of emission and absorption spectra.
     - Parameters:
       - `data`: The DataFrame containing spectral data to be plotted.
       - `continuum_overlay`: A boolean indicating whether a continuum overlay should be added to the plot.
-    - Returns: A matplotlib Figure object of the plotted data.
+      - `emission_lines`: An np.array with emission spectra data to be plotted; this can be derived from the Spectral Feature Extraction module
+      - `absorption_lines`: An np.array with absorption spectra data to be plotted; this can be derived from the Spectral Feature Extraction module
+     
+    - Returns: A matplotlib figure object of the plotted data.
 
 ## Implementation Specifications
 - Developers will select and implement at least two additional features from Annex B.
