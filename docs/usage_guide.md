@@ -343,6 +343,7 @@ This function identifies emission and absorption lines based on residuals in the
     Returns:
     - Tuple containing emission and absorption arrays.
     - Error message if any issues are encountered.
+    
 **Parameters:**
 - `data` (pd.DataFrame): The data with columns 'loglam', 'flux', and 'model'.
 
@@ -356,7 +357,25 @@ emission_wavelengths, absorption_wavelengths = extract_spectral_features(data)
 ```
 
 ### 8. Visualization Module (Spectral Visualizer in API diagram)
+#### plot_spectrum(df: pd.DataFrame, continuum=True, emission_lines=None, absorption_lines=None) -> np.array, np.array, None
+This function identifies emission and absorption lines based on residuals in the provided DataFrame.
+    Parameters:
+    - df: Pandas DataFrame.
+    Returns:
+    - Tuple containing emission and absorption arrays.
+    - Error message if any issues are encountered.
+    
+**Parameters:**
+- `data` (pd.DataFrame): The data with columns 'loglam', 'flux', and 'model'.
 
+**Returns:**
+- `np.array`: The first array is provided: wavelengths with emission
+- `np.array`: The second array is provided: wavelengths with absorption
+- 
+**Usage:**
+```python
+emission_wavelengths, absorption_wavelengths = extract_spectral_features(data)
+```
 
 ---
 
