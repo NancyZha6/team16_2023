@@ -9,7 +9,7 @@ docker pull iacs/cs107_ubuntu
 bash run_cs107_docker.sh ./
 
 #### Install dependency 
-run pip install -r requirements.txt at the root of the repo to install necessary dependencies 
+run pip install -r tests/requirements.txt at the root of the repo to install necessary dependencies 
 
 #### Run integration test 
 copy file test_integration.py and spectrum.fits into root directory and run pytest test_integration.py.
