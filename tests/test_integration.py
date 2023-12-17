@@ -1,12 +1,14 @@
 # NEW INTEGRATION TEST 
 import pytest
 import pandas as pd
+import numpy as np
 from data_query import load_data_sql, load_data_file, load_data_ids, load_data_constraints
 import data_preprocessing 
 import metadata_extraction 
 import wavelength_alignment 
 import data_augmentation
 import machine_learning
+import spectral_feature_extraction
 
 # Sample ADQL query for testing
 ADQL_QUERY = """
@@ -99,3 +101,9 @@ def test_data_processing_pipeline():
 
     prediction_prob = machine_learning.predict_proba(model, X_test)
     assert prediction_prob.shape == (len(X_test), model.n_classes_)
+    
+    # Step6: Spectral Feature Extraction
+    emission, absorption, error = spectral_feature_extraction.extract_spectral_features(merged_meta)
+    assert error is None
+    assert isinstance(emission, np.ndarray)
+    assert isinstance(absorption, np.ndarray) 
