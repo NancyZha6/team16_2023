@@ -7,3 +7,4 @@ numpy>=1.21.2
 
 # Additional dependencies (add more as needed)
 matplotlib>=3.4.3
+seaborn
