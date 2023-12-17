@@ -212,10 +212,7 @@ aligned_data = align_wavelength(data, wavelength_range=(505, 525), interpolation
 aligned_data_interpolated = align_wavelength(data, wavelength_range=(505, 525), interpolation=True)
 ```
 
-### 5. Visualization Module (Spectral Visualizer in API diagram)
-
-
-### 6. Data Augmentation Module (Data Augmentation in API diagram)
+### 5. Data Augmentation Module (Data Augmentation in API diagram)
 
 #### standard_derivative(flux: numpy.ndarray, wavelength: numpy.ndarray) -> numpy.ndarray
 This function calculates the standard derivative of flux with respect to wavelength.
@@ -271,7 +268,7 @@ augmented_data = augment_data(corrected_data, ['standard_derivative','fractional
 ```
 
 
-### 7. Machine Learning Module (Additional Feature 1, Astronomical Classifier in API diagram)
+### 6. Machine Learning Module (Additional Feature 1, Astronomical Classifier in API diagram)
 
 #### prepare_data(data: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.DataFrame]
 This function prepares the data for machine learning by cleaning, normalizing, and splitting it into training, validation, and testing sets.
@@ -337,10 +334,28 @@ This function predicts class probabilities for samples in the given data using t
 prediction_prob=predict_proba(model,X_test)
 ```
 
-### 8. Spectral Feature Extraction (Additional Feature 2, Feature Extractor in API diagram)
+### 7. Spectral Feature Extraction (Additional Feature 2, Feature Extractor in API diagram)
 
+#### extract_spectral_features(data: pd.DataFrame) -> np.array, np.array, None
+This function identifies emission and absorption lines based on residuals in the provided DataFrame.
+    Parameters:
+    - df: Pandas DataFrame .
+    Returns:
+    - Tuple containing emission and absorption arrays.
+    - Error message if any issues are encountered.
+**Parameters:**
+- `data` (pd.DataFrame): The data with columns 'loglam', 'flux', and 'model'.
 
+**Returns:**
+- `np.array`: The first array is provided: wavelengths with emission
+- `np.array`: The second array is provided: wavelengths with absorption
+- 
+**Usage:**
+```python
+emission_wavelengths, absorption_wavelengths = extract_spectral_features(data)
+```
 
+### 8. Visualization Module (Spectral Visualizer in API diagram)
 
 
 ---
