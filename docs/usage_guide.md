@@ -338,11 +338,6 @@ prediction_prob=predict_proba(model,X_test)
 
 #### extract_spectral_features(data: pd.DataFrame) -> np.array, np.array, None
 This function identifies emission and absorption lines based on residuals in the provided DataFrame.
-    Parameters:
-    - df: Pandas DataFrame .
-    Returns:
-    - Tuple containing emission and absorption arrays.
-    - Error message if any issues are encountered.
     
 **Parameters:**
 - `data` (pd.DataFrame): The data with columns 'loglam', 'flux', and 'model'.
@@ -350,36 +345,27 @@ This function identifies emission and absorption lines based on residuals in the
 **Returns:**
 - `np.array`: The first array is provided: wavelengths with emission
 - `np.array`: The second array is provided: wavelengths with absorption
-- 
+
 **Usage:**
 ```python
 emission_wavelengths, absorption_wavelengths = extract_spectral_features(data)
 ```
 
 ### 8. Visualization Module (Spectral Visualizer in API diagram)
-#### plot_spectrum(df: pd.DataFrame, continuum=True, emission_lines=None, absorption_lines=None) -> np.array, np.array, None
-This function identifies emission and absorption lines based on residuals in the provided DataFrame.
-    Parameters:
-    - df: Pandas DataFrame.
-    Returns:
-    - Tuple containing emission and absorption arrays.
-    - Error message if any issues are encountered.
-    
+
+#### plot_spectrum(df: pd.DataFrame, continuum=True, emission_lines=None, absorption_lines=None) -> None
+This function uses matplotlib to create static plots of the spectral data with options for overlay of the continuum data and annotations of emission and absorption spectra.
+
 **Parameters:**
 - `data` (pd.DataFrame): The data with columns 'loglam', 'flux', and 'model'.
 
-**Returns:**
-- `np.array`: The first array is provided: wavelengths with emission
-- `np.array`: The second array is provided: wavelengths with absorption
-- 
 **Usage:**
 ```python
-emission_wavelengths, absorption_wavelengths = extract_spectral_features(data)
+plot_spectrum(data, emission_lines = emission_wavelengths, absorption_lines = absorption_wavelength)
 ```
-
 ---
 
 ### Important Notes:
-- Ensure you have the necessary packages (`pandas` and `astroquery`) installed in your Python environment.
+- Ensure you have the necessary packages (`numpy`, `pandas` and `astroquery`) installed in your Python environment.
 - These functions are specifically designed for processing astronomical data and may not be suitable for other types of data without modifications.
 - Handle the data responsibly, especially when it comes to managing large datasets or sensitive information.
