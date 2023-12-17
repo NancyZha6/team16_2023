@@ -14,15 +14,15 @@ apiGraph <- "
         graph [rankdir = LR]
         # Nodes
         node [shape = box, style = filled, fillcolor = lightblue]
-        DataQuery [label = \"Data Query\"]
-        DataPreprocessing [label = \"Data Preprocessing\"]
-        MetadataExtractor [label = \"Metadata Extraction\"]
-        WavelengthAlignment [label = \"Wavelength Alignment\"]
-        SpectralVisualizer [label = \"Spectral Visualizer\"]
-        DataAugmentation [label = \"Data Augmentation\"]
-        AstronomicalClassifier [label = \"Astronomical Classifier\"]
         FeatureExtractor [label = \"Feature Extractor\"]
-
+        AstronomicalClassifier [label = \"Astronomical Classifier\"]
+        DataAugmentation [label = \"Data Augmentation\"]
+        SpectralVisualizer [label = \"Spectral Visualizer\"]
+        WavelengthAlignment [label = \"Wavelength Alignment\"]
+        MetadataExtractor [label = \"Metadata Extraction\"]
+        DataPreprocessing [label = \"Data Preprocessing\"]
+        DataQuery [label = \"Data Query\"]
+        
         # Connections
         DataQuery -> {load_data_sql load_data_file load_data_ids load_data_constraints}
         DataPreprocessing -> {load_data normalize remove_outliers interpolate correct_redshift}
