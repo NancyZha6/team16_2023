@@ -21,13 +21,13 @@ def test_load_data_sql():
 
 def test_load_data_file():
     # Test with a valid FITS file
-    valid_fits_file = "spectrum.fits"
+    valid_fits_file = "tests/spectrum.fits"
     result_dict = load_data_file(valid_fits_file)
     assert result_dict is not None
     assert all(key.startswith('hdu_') and len(value) > 0 for key, value in result_dict.items())
 
     # Test with an invalid FITS file
-    invalid_fits_file = "spectrum.fits"
+    invalid_fits_file = "tests/spectrum.fits"
     try:
         load_data_file(invalid_fits_file)
     except Exception as e:
