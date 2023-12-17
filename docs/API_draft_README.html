@@ -1,0 +1,236 @@
+<h1 id="api_draft-readme">API_draft README</h1>
+<h2 id="overview">Overview</h2>
+<p>This folder contains the draft of the Application Programming Interface (API) for the astronomical research library. The library aims to assist in the classification of astronomical objects, specifically stars, galaxies, and QSOs, by interfacing with Sloan Digital Sky Survey (SDSS) services.</p>
+<h2 id="modules-classes-and-functions">Modules, Classes, and Functions</h2>
+<h3 id="1-data-query-module">1. Data Query Module</h3>
+<ul>
+<li><p><strong>Function: load_data_sql(adql_query: str = None) -&gt; DataFrame</strong></p>
+<ul>
+<li>Retrieves SDSS data based on an ADQL query or identifiers.</li>
+<li>Parameters:
+<ul>
+<li><code>adql_query</code>: ADQL query to retrieve data. Default is None.</li>
+</ul></li>
+<li>Returns: DataFrame containing SDSS data defined by the query or identifiers.</li>
+</ul></li>
+<li><p><strong>Function: load_data_file(file: fits) -&gt; dict:</strong></p>
+<ul>
+<li>Accepts a fits file and just open it and load data.</li>
+<li>Parameters:
+<ul>
+<li><code>file</code>: FITS file path that meets SDSS format.</li>
+</ul></li>
+<li>Returns: Dictionary containing DataFrames for each HDU in the FITS file.</li>
+</ul></li>
+<li><p><strong>Function: load_data_ids(ids_query: str = None) -&gt; dict:</strong></p>
+<ul>
+<li>Retrieves SDSS data based on plateid, fiberid, and mjd.</li>
+<li>Parameters:
+<ul>
+<li><code>ids_query</code>: ADQL query to extract plateid, fiberid, and mjd. Default is None.</li>
+</ul></li>
+<li>Returns: Dictionary containing DataFrames for each HDU with extracted spectra.</li>
+</ul></li>
+<li><p><strong>Function: load_data_constraints(constraints: dictionary) -&gt; DataFrame:</strong></p>
+<ul>
+<li>Retrieves SDSS data based on constraints provided in the form of a dictionary.</li>
+<li>Parameters:
+<ul>
+<li><code>constraints</code>: constraints to put in the where statement of the query to get data</li>
+</ul></li>
+<li>Returns: Dataframe containing SDSS data defined via the query.</li>
+</ul></li>
+</ul>
+<h3 id="2-data-preprocessing-module-data-preprocessing-in-api-diagram">2. Data Preprocessing Module (Data Preprocessing in API diagram)</h3>
+<ul>
+<li><p><strong>Function: load_data(adql_query: str) -&gt; DataFrame:</strong></p>
+<ul>
+<li>Retrieves SDSS data using an ADQL query as a string.</li>
+<li>Parameters:
+<ul>
+<li><code>adql_query</code> (str): The query string in ADQL format to retrieve data.</li>
+</ul></li>
+<li>Returns: DataFrame containing the data fetched from SDSS based on the ADQL query.</li>
+</ul></li>
+<li><p><strong>Function: normalize(data: DataFrame, exclude_columns: List[str] = ['objectid']) -&gt; DataFrame:</strong></p>
+<ul>
+<li>Normalizes the spectral data in the DataFrame.</li>
+<li>Parameters:
+<ul>
+<li><code>data</code> (pd.DataFrame): DataFrame containing the spectral data to normalize.</li>
+<li><code>exclude_columns</code> (List[str], optional): List of columns to exclude from normalization. Default is <code>['objectid']</code>.</li>
+</ul></li>
+<li>Returns: DataFrame containing normalized data.</li>
+</ul></li>
+<li><p><strong>Function: remove_outliers(data: pd.DataFrame, threshold: float, to_remove_columns: list) -&gt; DataFrame:</strong></p>
+<ul>
+<li>Removes outliers above/below specific threshold from the spectral data</li>
+<li>Parameters:
+<ul>
+<li><code>data</code>: the data to remove outliers</li>
+<li><code>threshold</code>: the percentile threshold to remove outliers. E.g. threshold=0.9: remove top and bottom 10% data as outliers</li>
+<li><code>to_remove_columns</code>: a list of column names to remove the outliers</li>
+</ul></li>
+<li>Returns: Dataframe containing data with outliers removed.</li>
+</ul></li>
+<li><p><strong>Function: interpolate(spectra: DataFrame, flux_column='flux', wavelength_column='wavelength') -&gt; DataFrame:</strong></p>
+<ul>
+<li>Performs interpolation on the spectral data.</li>
+<li>Parameters:
+<ul>
+<li><code>spectra</code>: DataFrame containing flux and wavelength columns perform interpolation.</li>
+<li><code>flux_column</code>: Name of the flux column.</li>
+<li><code>wavelength_column</code>: Name of the wavelength column.</li>
+</ul></li>
+<li>Returns: Dataframe containing interpolated data</li>
+</ul></li>
+<li><p><strong>Function: correct_redshift(spectra: DataFrame, wavelenght_column='wavelength',redshift_column='redshift') -&gt; DataFrame:</strong></p>
+<ul>
+<li>Corrects redshift in the spectral data.</li>
+<li>Parameters:
+<ul>
+<li><code>spectra</code>: DataFrame containing 'wavelength' and 'flux' columns to perform redshift correction.</li>
+<li><code>wavelenght_column</code>: name of wavelength column</li>
+<li><code>redshift_column</code>: name of redshift column</li>
+</ul></li>
+<li>Returns: Dataframe containing data with red shift corrected.</li>
+</ul></li>
+</ul>
+<h3 id="3-metadata-extraction-module-metadata-extraction-in-api-diagram">3. Metadata Extraction Module (Metadata Extraction in API diagram)</h3>
+<ul>
+<li><strong>Function: extract_metadata(data: DataFrame, identifiers: bool = True, coordinates: bool = True, redshifts: bool = True, other_fields: List[str] = None) -&gt; DataFrame:</strong>
+<ul>
+<li>Extracts user-defined parameters of metadata from the spectral data.</li>
+<li>Parameters:
+<ul>
+<li><code>data</code>: the pandas dataframe of the data to extract metadata from</li>
+<li><code>identifiers</code>: If True, extract object identifier: Spectral Object ID (SPECOBJID).</li>
+<li><code>coordinates</code>: If True, extract object coordinates: right ascension (RA), declination (DEC).</li>
+<li><code>redshifts</code>: If True, extract redshift (Z).</li>
+<li><code>other_fields</code>: A list of other fields to extract if specified.</li>
+</ul></li>
+<li>Returns: Dataframe containing the extracted metadata.</li>
+</ul></li>
+</ul>
+<h3 id="4-wavelength-alignment-module-wavelength-alignment-in-api-diagram">4. Wavelength Alignment Module (Wavelength Alignment in API diagram)</h3>
+<ul>
+<li><strong>Function: align_wavelength(data: pd.DataFrame, wavelength_range: Tuple[float, float], interpolation: bool = False) -&gt; DataFrame:</strong>
+<ul>
+<li>Aligns the wavelength for all spectra within a predefined range.</li>
+<li>If needed, add interpolation. Default: no interpolation (interpolation = False)</li>
+<li>Parameters:
+<ul>
+<li><code>data</code>: DataFrame containing 'wavelength' and 'flux' columns.</li>
+<li><code>wavelength_range</code>: Tuple representing the range of wavelengths to align.</li>
+<li><code>interpolation</code>: If True, perform interpolation. Default is False.</li>
+</ul></li>
+<li>Returns: DataFrame with aligned wavelength spectra.</li>
+</ul></li>
+</ul>
+<h3 id="5-data-augmentation-module-data-augmentation-in-api-diagram">5. Data Augmentation Module (Data Augmentation in API diagram)</h3>
+<ul>
+<li><p><strong>Function: standard_derivative(flux: numpy.ndarray, wavelength: numpy.ndarray) -&gt; array:</strong></p>
+<ul>
+<li>Calculates the standard derivative of flux with respect to wavelength.</li>
+<li>Parameters:
+<ul>
+<li><code>flux</code>: A numpy array of flux data.</li>
+<li><code>wavelength</code>: A numpy array of wavelength data.</li>
+</ul></li>
+<li>Returns: The derivative of flux with respect to wavelength.</li>
+</ul></li>
+<li><p><strong>Function: fractional_derivative(flux: numpy.ndarray, wavelength: numpy.ndarray, order: float, h: float = 1e-5, max_terms: int = 50) -&gt; array:</strong></p>
+<ul>
+<li>Calculates the fractional derivative of flux with respect to wavelength using the Grünwald-Letnikov approach.</li>
+<li>Parameters:
+<ul>
+<li><code>flux</code>: The flux data (as a numpy array).</li>
+<li><code>wavelength</code>: The wavelength data (as a numpy array).</li>
+<li><code>order</code>: The order of the derivative (fractional).</li>
+<li><code>h</code>: The step size for numerical differentiation (default is 1e-5).</li>
+<li><code>max_terms</code>: Maximum number of terms to include in the sum (default is 50).</li>
+</ul></li>
+<li>Returns: The fractional derivative of flux with respect to wavelength.</li>
+</ul></li>
+<li><p><strong>Function: augment_data(data: pd.DataFrame, methods: list, frac_order: float = None) -&gt; DataFrame:</strong></p></li>
+<li><p>Computes derivatives and fractional derivatives of flux with respect to wavelength, appending them to each preprocessed spectrum in the DataFrame.</p></li>
+<li><p>Parameters:</p>
+<ul>
+<li><code>data</code>: The DataFrame containing spectral data to augment. Assumes 'flux' and 'wavelength' columns are present.</li>
+<li><code>methods</code>: A list of callable functions that define the augmentation methods to be applied.</li>
+<li><code>frac_order</code>: The order of the fractional derivative.</li>
+</ul></li>
+<li><p>Returns: The augmented DataFrame.</p></li>
+</ul>
+<h3 id="6-machine-learning-module-additional-feature-1-astronomical-classifier-in-api-diagram">6. Machine Learning Module (Additional Feature 1, Astronomical Classifier in API diagram)</h3>
+<ul>
+<li><p><strong>Function: prepare_data(data: pd.DataFrame) -&gt; Tuple:</strong></p></li>
+<li><p>Prepares the data for machine learning by cleaning, normalizing, and splitting it into training, validation, and testing sets.</p></li>
+<li><p>Parameters:</p>
+<ul>
+<li><code>data</code>: The DataFrame containing spectral data.</li>
+</ul></li>
+<li><p>Returns: Tuple containing X_train, X_val, y_train, y_val, and X_test.</p></li>
+<li><p><strong>Function: fit_model(X_train: pd.DataFrame, y_train: pd.Series, X_val: pd.DataFrame, y_val: pd.Series) -&gt; RandomForestClassifier:</strong></p></li>
+<li><p>Fits a RandomForestClassifier model to the training data and evaluates it using the validation data. It also visualizes the confusion matrix.</p></li>
+<li><p>Parameters:</p>
+<ul>
+<li><code>X_train</code>: The training data features.</li>
+<li><code>y_train</code>: The training data labels.</li>
+<li><code>X_val</code>: The validation data features.</li>
+<li><code>y_val</code>: The validation data labels.</li>
+</ul></li>
+<li><p>Returns: The trained Random Forest classifier model.</p></li>
+<li><p><strong>Function: predict_class(model: RandomForestClassifier, data: pd.DataFrame) -&gt; Series:</strong></p></li>
+<li><p>Predicts class labels for samples in the given data using the trained model.</p></li>
+<li><p>Parameters:</p>
+<ul>
+<li><code>model</code>: The trained Random Forest classifier model.</li>
+<li><code>data</code>: The data for which class labels need to be predicted.</li>
+</ul></li>
+<li><p>Returns: Predicted class labels.</p></li>
+<li><p><strong>Function: predict_proba(model: RandomForestClassifier, data: pd.DataFrame) -&gt; DataFrame:</strong></p></li>
+<li><p>Predicts class probabilities for samples in the given data using the trained model.</p></li>
+<li><p>Parameters:</p>
+<ul>
+<li><code>model</code>: The trained Random Forest classifier model.</li>
+<li><code>data</code>: The data for which class probabilities need to be predicted.</li>
+</ul></li>
+<li><p>Returns: DataFrame containing predicted class probabilities.</p></li>
+</ul>
+<h3 id="7-spectral-feature-extraction-additional-feature-2-feature-extractor-in-api-diagram">7. Spectral Feature Extraction (Additional Feature 2, Feature Extractor in API diagram)</h3>
+<ul>
+<li><strong>Function: extract_spectral_features(data: pd.DataFrame) -&gt; array:</strong>
+<ul>
+<li>Extract spectral features defining emission and absorption lines as those with flux levels exceeding 2 sigma from the continuum.</li>
+<li>Parameters:
+<ul>
+<li><code>data</code>: The DataFrame containing the observed spectral data which includes <code>flux</code>, <code>loglam</code> (log of wavelength), and <code>model</code> (continuum).</li>
+</ul></li>
+<li>Returns: Array 1 containing the wavelength of emission, array 2 containing the wavelengh of absorption, and array 3 is the potential error message.</li>
+</ul></li>
+</ul>
+<h3 id="8-visualization-module-spectral-visualizer-in-api-diagram">8. Visualization Module (Spectral Visualizer in API diagram)</h3>
+<ul>
+<li><strong>Function: plot_spectrum(df: pd.DataFrame, continuum=True, emission_lines=None, absorption_lines=None) -&gt; None:</strong>
+<ul>
+<li><p>Uses matplotlib to create static plots of the spectral data with options for overlay of the continuum data and annotations of emission and absorption spectra.</p></li>
+<li><p>Parameters:</p>
+<ul>
+<li><code>data</code>: The DataFrame containing spectral data to be plotted.</li>
+<li><code>continuum_overlay</code>: A boolean indicating whether a continuum overlay should be added to the plot.</li>
+<li><code>emission_lines</code>: An np.array with emission spectra data to be plotted; this can be derived from the Spectral Feature Extraction module</li>
+<li><code>absorption_lines</code>: An np.array with absorption spectra data to be plotted; this can be derived from the Spectral Feature Extraction module</li>
+</ul></li>
+<li><p>Returns: A matplotlib figure object of the plotted data.</p></li>
+</ul></li>
+</ul>
+<h2 id="implementation-specifications">Implementation Specifications</h2>
+<ul>
+<li>Developers will select and implement at least two additional features from Annex B.</li>
+<li>The methodology used should be flexible for future changes without compromising library functions.</li>
+</ul>
+<h2 id="documentation-and-reporting">Documentation and Reporting</h2>
+<ul>
+<li>All design and implementation details will be documented and reviewed with the client prior to the final submission.</li>
+</ul>
