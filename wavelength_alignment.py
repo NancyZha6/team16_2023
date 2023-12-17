@@ -1,8 +1,5 @@
 import pandas as pd 
-from astroquery.sdss import SDSS
 from typing import Tuple
-from data_query import *
-from data_preprocessing import *
 
 def align_wavelength(data: pd.DataFrame, wavelength_range: Tuple[float, float], interpolation: bool = False) -> pd.DataFrame:
     """
