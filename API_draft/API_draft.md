@@ -69,13 +69,13 @@ This folder contains the draft of the Application Programming Interface (API) fo
     - Returns: Dataframe containing data with red shift corrected.
 
 ### 3. Metadata Extraction Module (Metadata Extraction in API diagram)
-  - **Function: extract_metadata(data: DataFrame, identifiers: bool = True, coordinates: bool = True, chemical_abundances: bool = True, redshifts: bool = True, other_fields: List[str] = None) -> DataFrame:**
-    - Extracts metadata from the spectral data based on user-defined parameters.
+  - **Function: extract_metadata(data: DataFrame, identifiers: bool = True, coordinates: bool = True, redshifts: bool = True, other_fields: List[str] = None) -> DataFrame:**
+    - Extracts user-defined parameters of metadata from the spectral data.
     - Parameters:
-      - `data`: the data to extract metadata from
-      - `identifiers`: If True, extract object identifiers.
-      - `coordinates`: If True, extract object coordinates.
-      - `redshifts`: If True, extract redshifts.
+      - `data`: the pandas dataframe of the data to extract metadata from
+      - `identifiers`: If True, extract object identifier: Spectral Object ID (SPECOBJID).
+      - `coordinates`: If True, extract object coordinates: right ascension (RA), declination (DEC).
+      - `redshifts`: If True, extract redshift (Z).
       - `other_fields`: A list of other fields to extract if specified.
     - Returns: Dataframe containing the extracted metadata.
 
