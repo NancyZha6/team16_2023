@@ -22,7 +22,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r tests/requirements.txt
         - name: Set PYTHONPATH
-          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+          run: echo "PYTHONPATH=${{ github.workspace }}/src/astronomy_research_team16" >> $GITHUB_ENV
         - name: Run integration test files
           run: |
             pytest tests/test_integration.py
@@ -39,7 +39,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r tests/requirements.txt
         - name: Set PYTHONPATH
-          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+          run: echo "PYTHONPATH=${{ github.workspace }}/src/astronomy_research_team16" >> $GITHUB_ENV
         - name: Run data query module test files
           run: |
             pytest tests/test_data_query.py
@@ -56,7 +56,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r tests/requirements.txt
         - name: Set PYTHONPATH
-          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+          run: echo "PYTHONPATH=${{ github.workspace }}/src/astronomy_research_team16" >> $GITHUB_ENV
         - name: Run data preprocessing module test files
           run: |
             pytest tests/test_data_preprocessing.py
@@ -73,7 +73,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r tests/requirements.txt
         - name: Set PYTHONPATH
-          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+          run: echo "PYTHONPATH=${{ github.workspace }}/src/astronomy_research_team16" >> $GITHUB_ENV
         - name: Run metadata extractor module test files
           run: |
             pytest tests/test_metadata_extraction.py
@@ -107,7 +107,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r tests/requirements.txt
         - name: Set PYTHONPATH
-          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+          run: echo "PYTHONPATH=${{ github.workspace }}/src/astronomy_research_team16" >> $GITHUB_ENV
         - name: Run data augmentation module test files
           run: |
             pytest tests/test_data_augmentation.py
@@ -124,7 +124,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r tests/requirements.txt
         - name: Set PYTHONPATH
-          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+          run: echo "PYTHONPATH=${{ github.workspace }}/src/astronomy_research_team16" >> $GITHUB_ENV
         - name: Run machine learning module test files
           run: |
             pytest tests/test_machine_learning.py
@@ -141,7 +141,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r tests/requirements.txt
         - name: Set PYTHONPATH
-          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+          run: echo "PYTHONPATH=${{ github.workspace }}/src/astronomy_research_team16" >> $GITHUB_ENV
         - name: Run spectral feature extraction module test files
           run: |
             pytest tests/test_spectral_feature_extraction.py
@@ -158,7 +158,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r tests/requirements.txt
         - name: Set PYTHONPATH
-          run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+          run: echo "PYTHONPATH=${{ github.workspace }}/src/astronomy_research_team16" >> $GITHUB_ENV
         - name: Run spectral feature extraction module test files
           run: |
             pytest tests/test_visualization.py
